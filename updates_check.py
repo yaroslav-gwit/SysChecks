@@ -10,9 +10,6 @@ from invoke import run
 import invoke
 
 
-
-
-
 def detect_os() -> str:
     os_release_input = "/etc/os-release"
     if exists(os_release_input):
