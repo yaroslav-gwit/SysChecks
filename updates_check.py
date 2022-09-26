@@ -10,9 +10,7 @@ from invoke import run
 import invoke
 
 
-if os.getuid() != 0:
-    print("You have to run this script as root!", file=sys.stderr)
-    sys.exit(1)
+
 
 
 def detect_os() -> str:
@@ -63,6 +61,10 @@ def pretty_os() -> str:
 
 
 def dnf_check(dummy_data:bool = False) -> dict:
+    if os.getuid() != 0:
+        print("You have to run this script as root!", file=sys.stderr)
+        sys.exit(1)
+
     all_updates = []
     security_updates = []
 
@@ -138,6 +140,10 @@ def dnf_check(dummy_data:bool = False) -> dict:
 
 
 def deb_check(dummy_data:bool = False) -> dict:
+    if os.getuid() != 0:
+        print("You have to run this script as root!", file=sys.stderr)
+        sys.exit(1)
+
     all_updates = []
     security_updates = []
 
@@ -186,6 +192,10 @@ def deb_check(dummy_data:bool = False) -> dict:
 
 
 def yum_check(dummy_data:bool = True) -> dict:
+    if os.getuid() != 0:
+        print("You have to run this script as root!", file=sys.stderr)
+        sys.exit(1)
+
     all_updates = []
     security_updates = []
 
