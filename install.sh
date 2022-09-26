@@ -5,23 +5,17 @@ fi
 
 INSTALL_FOLDER=/opt/syschecks
 
-if [[ $(grep -c ubuntu /etc/os-release) > 0 ]]; then
+if [[ $(grep "ID=" /etc/os-release | grep -c "ubuntu\|debian") > 0 ]]; then
     apt update
     apt -y install python3-pip python3-venv git
-
-elif [[ $(grep -c debian /etc/os-release) > 0 ]]; then
-    apt update
-    apt -y install python3-pip python3-venv git
-
-elif [[ $(grep -c centos /etc/os-release) > 0 ]]; then
+elif [[ $(grep "ID=" /etc/os-release | grep -c "centos") > 0 ]]; then
     yum makecache fast
     yum -y install python3-pip git
     python3 -m pip install virtualenv
-
-elif [[ $(grep -c almalinux /etc/os-release) > 0 ]]; then
+elif [[ $(grep "ID=" /etc/os-release | grep -c "almalinux") > 0 ]]; then
     dnf makecache
-    dnf -y install python3-pip python3-virtualenv git
-
+    dnf -y install python3-pip git
+    python3 -m pip install virtualenv
 else
     echo "Sorry your OS is not yet supported!" && exit 1
 fi
