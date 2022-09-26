@@ -31,6 +31,7 @@ git clone https://github.com/yaroslav-gwit/SysChecks.git ${INSTALL_FOLDER}/
 
 cd ${INSTALL_FOLDER}
 python3 -m venv venv
+${INSTALL_FOLDER}/venv/bin/python3 -m pip install --upgrade pip
 ${INSTALL_FOLDER}/venv/bin/python3 -m pip install -r requirements.txt
 
 if [[ -f /bin/syschecks ]]; then
