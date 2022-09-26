@@ -27,7 +27,7 @@ else
 fi
 
 mkdir ${INSTALL_FOLDER}
-git clone https://github.com/yaroslav-gwit/SysChecks.git -C ${INSTALL_FOLDER}
+git clone https://github.com/yaroslav-gwit/SysChecks.git ${INSTALL_FOLDER}
 
 cd ${INSTALL_FOLDER}
 python3 -m venv venv
