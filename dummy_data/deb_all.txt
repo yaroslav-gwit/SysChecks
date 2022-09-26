@@ -1,0 +1,96 @@
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+Calculating upgrade... Done
+The following packages will be upgraded:
+  fonts-opensymbol libnvidia-cfg1-515 libnvidia-common-515 libnvidia-compute-515 libnvidia-compute-515:i386 libnvidia-decode-515 libnvidia-decode-515:i386 libnvidia-encode-515
+  libnvidia-encode-515:i386 libnvidia-extra-515 libnvidia-fbc1-515 libnvidia-fbc1-515:i386 libnvidia-gl-515 libnvidia-gl-515:i386 libreoffice-help-common libreoffice-help-de
+  libreoffice-help-en-gb libreoffice-help-en-us libreoffice-help-es libreoffice-help-fr libreoffice-help-it libreoffice-help-ja libreoffice-help-pt libreoffice-help-pt-br libreoffice-help-ru
+  libreoffice-help-zh-cn libreoffice-help-zh-tw libreoffice-l10n-ar libreoffice-l10n-de libreoffice-l10n-en-gb libreoffice-l10n-en-za libreoffice-l10n-es libreoffice-l10n-fr libreoffice-l10n-it
+  libreoffice-l10n-ja libreoffice-l10n-pt libreoffice-l10n-pt-br libreoffice-l10n-ru libreoffice-l10n-zh-cn libreoffice-l10n-zh-tw libreoffice-style-colibre libreoffice-style-elementary
+  libreoffice-style-yaru libuno-cppu3 libuno-cppuhelpergcc3-3 libuno-purpenvhelpergcc3-3 libuno-sal3 libuno-salhelpergcc3-3 linux-generic linux-headers-5.19.0-76051900
+  linux-headers-5.19.0-76051900-generic linux-headers-generic linux-image-5.19.0-76051900-generic linux-image-generic linux-libc-dev linux-modules-5.19.0-76051900-generic linux-system76
+  nvidia-compute-utils-515 nvidia-dkms-515 nvidia-driver-515 nvidia-kernel-common-515 nvidia-kernel-source-515 nvidia-utils-515 pgadmin4-desktop pgadmin4-server uno-libs-private ure
+  xserver-xorg-video-nvidia-515
+68 to upgrade, 0 to newly install, 0 to remove and 0 not to upgrade.
+1 not fully installed or removed.
+Inst libreoffice-l10n-en-za [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Inst libreoffice-style-colibre [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Inst libreoffice-style-elementary [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Inst libreoffice-style-yaru [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Inst libuno-sal3 [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Inst libuno-salhelpergcc3-3 [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Inst libuno-cppu3 [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Inst libuno-purpenvhelpergcc3-3 [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Inst ure [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64]) []
+Inst libuno-cppuhelpergcc3-3 [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64]) []
+Inst uno-libs-private [1:7.3.5-0ubuntu0.22.04.1] (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Inst pgadmin4-desktop [6.13] (6.14 pgAdmin 4:pgadmin4 [amd64]) []
+Inst pgadmin4-server [6.13] (6.14 pgAdmin 4:pgadmin4 [amd64])
+Conf fonts-opensymbol (2:102.12+LibO7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf nvidia-driver-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-extra-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-common-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [all])
+Conf libnvidia-gl-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-gl-515:i386 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [i386])
+Conf nvidia-dkms-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf nvidia-kernel-source-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf nvidia-kernel-common-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-decode-515:i386 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [i386])
+Conf libnvidia-decode-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-compute-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-compute-515:i386 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [i386])
+Conf nvidia-compute-utils-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-encode-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-encode-515:i386 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [i386])
+Conf nvidia-utils-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf xserver-xorg-video-nvidia-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-fbc1-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libnvidia-fbc1-515:i386 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [i386])
+Conf libnvidia-cfg1-515 (515.65.01-1pop0~1663626642~22.04~1f94f41 Pop!_OS Release:22.04/jammy [amd64])
+Conf libreoffice-l10n-zh-tw (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-zh-tw (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-zh-cn (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-zh-cn (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-ru (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-ru (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-pt-br (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-pt-br (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-pt (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-pt (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-ja (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-ja (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-it (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-it (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-fr (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-fr (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-es (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-es (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-en-us (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-en-gb (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-en-gb (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-de (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-de (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-help-common (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-ar (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-l10n-en-za (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-style-colibre (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-style-elementary (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libreoffice-style-yaru (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [all])
+Conf libuno-sal3 (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Conf libuno-salhelpergcc3-3 (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Conf libuno-cppu3 (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Conf libuno-purpenvhelpergcc3-3 (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Conf ure (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Conf libuno-cppuhelpergcc3-3 (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Conf uno-libs-private (1:7.3.6-0ubuntu0.22.04.1 Ubuntu:22.04/jammy-updates [amd64])
+Conf pgadmin4-desktop (6.14 pgAdmin 4:pgadmin4 [amd64])
+Conf pgadmin4-server (6.14 pgAdmin 4:pgadmin4 [amd64])
+Conf rtl8812au-dkms (4.3.8.12175.20140902+dfsg-0ubuntu15 Ubuntu:22.04/jammy [all])
+Inst pgadmin4-server [6.13] (6.14 pgAdmin 4:pgadmin4 [amd64] security)
+Inst pgadmin4-server [6.13] (6.14 pgAdmin 4:pgadmin4 [amd64] security)
+Inst pgadmin4-server [6.13] (6.14 pgAdmin 4:pgadmin4 [amd64] security)
+Inst pgadmin4-server [6.13] (6.14 pgAdmin 4:pgadmin4 [amd64] security)
+Inst pgadmin4-server [6.13] (6.14 pgAdmin 4:pgadmin4 [amd64] security)
+Inst pgadmin4-server [6.13] (6.14 pgAdmin 4:pgadmin4 [amd64] security)
+Inst pgadmin4-server [6.13] (6.14 pgAdmin 4:pgadmin4 [amd64] security)

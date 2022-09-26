@@ -1,0 +1,5 @@
+Loaded plugins: fastestmirror, langpacks, versionlock
+updateinfo info done
+
+test_item
+test_item_2

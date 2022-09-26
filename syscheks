@@ -1,0 +1,17 @@
+#!/opt/syschecks/venv/bin/python3
+import sys
+from os.path import exists
+
+# PRODUCTION
+if exists("/opt/syschecks/") and exists("/opt/syschecks/syschecks"):
+    sys.path.insert(1, "/opt/syschecks/")
+# LOCAL DEV ENV
+elif exists("/root/Git/SysChecks/") and exists("/root/Git/SysChecks/syschecks"):
+    sys.path.insert(1, "/root/Git/SysChecks/")
+else:
+    print("SysChecks is not installed properly!", file=sys.stderr)
+    sys.exit(1)
+
+from main import app
+
+app()
