@@ -39,6 +39,9 @@ if [[ -f /bin/syschecks ]]; then
 fi
 ln syschecks /bin/syschecks
 
+syschecks updates --save-file
+syschecks
+
 echo
 echo
 echo "The software has been installed!"
