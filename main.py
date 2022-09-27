@@ -61,7 +61,8 @@ def login_view():
         update_results = "🟠 Still loading..."
 
     console = Console()
-    console.print(Panel.fit(
+    # console.print(Panel.fit(
+    console.print(Panel(
         "\n" +
         "🔥 [green]System info[/] 🔥" +
         "\n[white]" +
