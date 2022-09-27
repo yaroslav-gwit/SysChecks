@@ -1,5 +1,4 @@
 from os.path import exists
-import multiprocessing
 import re
 
 import typer
@@ -9,6 +8,7 @@ from rich.console import Console
 
 import kernel_check
 import updates_check
+import system_info
 
 
 app = typer.Typer()
@@ -42,42 +42,15 @@ def updates(
 def login_view():
     """ Show a pretty login banner """
 
-    # Get CPU model on Linux
-    with open("/proc/cpuinfo", "r") as f:
-        cpu_model = f.read().split("\n")
-    re_cpu_model = re.compile(r".*model name.*")
-    re_cpu_model_sub = re.compile(r".*model name.*:\s")
-    for i in cpu_model:
-        if re_cpu_model.match(i):
-            i = re_cpu_model_sub.sub("", i)
-            cpu_model = i
-            break
+    cpu_info_dict = system_info.get_cpuinfo_linux()
+    cpu_model = cpu_info_dict["cpu_model"]
+    cpu_cores = cpu_info_dict["cpu_cores"]
 
-    # Get memory info
-    with open("/proc/meminfo", "r") as f:
-        mem_info = f.read().split("\n")
-    re_mem_total = re.compile(r".*MemTotal.*")
-    re_mem_total_sub = re.compile(r".*MemTotal.*:\s+")
-    re_mem_free = re.compile(r".*MemAvailable.*")
-    re_mem_free_sub = re.compile(r".*MemAvailable.*:\s+")
-    mem_total = ""
-    mem_free = ""
-    for i in mem_info:
-        if re_mem_total.match(i):
-            i = re_mem_total_sub.sub("", i)
-            i = i.strip(" kB")
-            i = (float(i) / 1024) / 1024
-            i = round(i, 2)
-            mem_total = i
-        elif re_mem_free.match(i):
-            i = re_mem_free_sub.sub("", i)
-            i = i.strip(" kB")
-            i = (float(i) / 1024) / 1024
-            i = round(i, 2)
-            mem_free = i
-    mem_used = round((mem_total - mem_free), 2)
+    mem_info_dict = system_info.get_meminfo_linux()
+    mem_total = mem_info_dict["mem_total_h"]
+    mem_free = mem_info_dict["mem_free_h"]
+    mem_used = mem_info_dict["mem_used_h"]
 
-    number_of_cpus = multiprocessing.cpu_count()
     kernel_results = kernel_check.final_human(return_result=True)
     prettyos = updates_check.pretty_os()
     updates_file = "/tmp/syschk_updates.human"
@@ -86,7 +59,7 @@ def login_view():
             update_results = f.read()
     else:
         update_results = "🟠 Still loading..."
-    
+
     console = Console()
     console.print(Panel.fit(
         "\n" +
@@ -94,9 +67,9 @@ def login_view():
         "\n[white]" +
         "[blue]💻 OS installed: [/]" + prettyos +
         "\n"
-        "[blue]🤖 CPU Cores: [/]" + str(number_of_cpus) + " (" + cpu_model + ")" +
+        "[blue]🤖 CPU Cores: [/]" + str(cpu_cores) + " (" + cpu_model + ")" +
         "\n"
-        "[blue]🧠 Memory: [/]" + str(mem_used) + "G(used)/" + str(mem_total) + "G(total)" +
+        "[blue]🧠 Memory: [/]" + str(mem_used) + "(used)/" + str(mem_total) + "(total)" +
         "\n[/]" +
         "\n" +
         "🔥 [green]Kernel reboot status[/] 🔥" +
