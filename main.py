@@ -58,11 +58,12 @@ def self_update():
             if result.ok:
                 git_output = result.stdout.splitlines()
                 re_out_1 = re.compile(".*Already up to date.*")
+                re_out_2 = re.compile(".*Already up-to-date.*")
                 for index, value in enumerate(git_output):
                     if re_out_1.match(value):
                         console.print("[green]SysChecks is already up-to-date!")
-                    elif not re_out_1.match(value) and len(git_output) == 1:
-                        console.print("[green]SysChecks was updated succesfully!")
+                    elif re_out_2.match(value):
+                        console.print("[green]SysChecks is already up-to-date!")
                     elif not re_out_1.match(value) and (index + 1) == len(git_output):
                         console.print("[green]SysChecks was updated succesfully!")
 
