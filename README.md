@@ -19,3 +19,11 @@ Kernel reboot check compares the running kernel version with a list of installed
 ## System Updates
 Updates check uses dnf, yum or apt (depending on the OS) to get a list of available updates, and then sorts them into 2 groups: System and Security updates. Includes 2 outputs: human (used in Login Banner) and JSON (used to integrate with Zabbix).
 <br>![SysChecks Updates Check](https://github.com/yaroslav-gwit/SysChecks/blob/main/screenshots/syschecks_updates.png "SysChecks Updates Check")
+
+# Installation
+If you'd like to install SysChecks on your server, just run the command below:
+```
+sudo su -
+curl https://raw.githubusercontent.com/yaroslav-gwit/SysChecks/main/install.sh | bash
+# or with `bash -x` to turn on the debug mode
+```
