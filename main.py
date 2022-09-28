@@ -61,6 +61,8 @@ def self_update():
                 for index, value in enumerate(git_output):
                     if re_out_1.match(value):
                         console.print("[green]SysChecks is already up-to-date!")
+                    elif not re_out_1.match(value) and len(git_output) == 1:
+                        console.print("[green]SysChecks was updated succesfully!")
                     elif not re_out_1.match(value) and (index + 1) == len(git_output):
                         console.print("[green]SysChecks was updated succesfully!")
 
