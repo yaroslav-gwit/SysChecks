@@ -8,11 +8,6 @@ from rich.console import Console
 from invoke import run
 
 
-# if os.getuid() != 0:
-#     print("You have to run this script as root/sudo!", file=sys.stderr)
-#     sys.exit(1)
-
-
 def get_running_kernel() -> str:
     command = "uname -r"
     result = run(command, hide=True)
@@ -54,6 +49,12 @@ def final_json(save_file:bool = False, file_location:str = "/tmp/syschk_kern.jso
 
     running_kernel = get_running_kernel()
     installed_kernels = get_installed_kernels()
+    
+    re_oem = re.compile(".*-oem.*")
+    if re_oem.match(running_kernel):
+        for i in installed_kernels:
+            if not re_oem.match(i):
+                installed_kernels.remove(i)
     latest_installed_kernel = installed_kernels[-1]
 
     reboot_required = False
