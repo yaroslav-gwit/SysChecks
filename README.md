@@ -33,3 +33,4 @@ curl https://raw.githubusercontent.com/yaroslav-gwit/SysChecks/main/install.sh |
 - disk space checks to show up at the login sreen if there are disks with less than 10% free space
 - system update integration to automate system and security updates across the estate
 - FreeBSD integration
+- unified JSON output for all included functions
