@@ -1,9 +1,10 @@
 from os.path import exists
 import re
-
-import typer
 import os
 import sys
+import datetime
+
+import typer
 from rich.panel import Panel
 from rich.console import Console
 import invoke
@@ -27,19 +28,23 @@ def kern(
 
 @app.command()
 def updates(
-    file_location:str = typer.Argument("/tmp/syschk_updates.human", help="Output file location"),
-    json_file_location:str = typer.Argument("/tmp/syschk_updates.json", help="JSON output file location"),
-    save_file:bool = typer.Option(False, help="Save human output as a file"),
-    json:bool = typer.Option(False, help="Show JSON output"),
+    cache_file_location:str = typer.Option("/tmp/syschk_updates.json", help="JSON Cache file location"),
+    cache_create:bool = typer.Option(False, help="Create a JSON file on disk to read the data from"),
+    cache_use:bool = typer.Option(True, help="Use JSON file as a cache (don't start a fresh check)"),
+    cache_timeout:int = typer.Option(900, help="Time (in minutes) to check if cache is valid (15 hours by default)"),
+    json_output:bool = typer.Option(False, help="Show JSON output"),
+    no_output:bool = typer.Option(False, help="No console output"),
     dummy_data:bool = typer.Option(False, help="Use dummy data to test/debug the app"),
-    cache:bool = typer.Option(False, help="Use dummy data to test/debug the app"),
-    cache_timeout:int = typer.Option(False, help="Use dummy data to test/debug the app"),
     ):
     """ Updates related checks """
-    if not json:
-        updates_check.final_human(dummy_data=dummy_data, save_file=save_file, file_location=file_location)
-    if json:
-        updates_check.final_json(dummy_data=dummy_data, save_file=save_file, file_location=json_file_location)
+    if json_output:
+        if cache_create:
+            cache_use = False
+        updates_check.final_json(cache_file_location=cache_file_location, cache_create=cache_create, cache_use=cache_use, cache_timeout=cache_timeout, json_console_output = json_output, dummy_data=dummy_data)
+    else:
+        if cache_create:
+            cache_use = False
+        updates_check.final_human(cache_file_location=cache_file_location, cache_create=cache_create, cache_use=cache_use, cache_timeout=cache_timeout, dummy_data=dummy_data, no_output=no_output)
 
 
 @app.command()
@@ -78,6 +83,44 @@ def self_update():
                     console = Console(stderr=True)
                     console.print("[red]/opt/syschecks/ is not a Git repo folder![/]\nPlease remove the folder and install [green]SysChecks[/] again.")
                     sys.exit(1)
+    cron_init()
+
+
+@app.command()
+def cron_init():
+    """ Initialize the required cron jobs """
+    file_location = "/etc/cron.d/syschecks"
+    if exists(file_location):
+        os.remove(file_location)
+
+    cron_jobs_list = []
+    result = invoke.run("which bash", hide=True)
+    if result.ok:
+        bash_shell_location = result.stdout.splitlines()[0]
+
+    cron_shell = "SHELL=" + bash_shell_location
+    cron_jobs_list.append(cron_shell)
+    cron_jobs_list.append("PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")
+
+    cron_job_generation_date = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    cron_jobs_list.append("\n# THIS JOB FILE WAS GENERATED ON: " + cron_job_generation_date)
+    
+    cron_job_1 = "@reboot root sleep 10 && syschecks updates --cache-create --no-output"
+    cron_job_2 = "7 */12 * * * root syschecks updates --cache-create --no-output"
+    cron_job_3 = "17 9 */3 * * root syschecks self-update"
+    
+    cron_jobs_list.append(cron_job_1)
+    cron_jobs_list.append(cron_job_2)
+    cron_jobs_list.append(cron_job_3)
+
+    final_result = "\n".join(cron_jobs_list) + "\n"
+    with open(file_location, "w") as f:
+        f.write(final_result)
+
+    if exists(file_location):
+        Console().print("[green]The new cron.d file has been created: [/]" + file_location)
+    else:
+        Console().print("[red]Could not create a new cron.d file at: [/]" + file_location)
 
 
 @app.command()
@@ -96,13 +139,8 @@ def login_view():
 
     kernel_results = kernel_check.final_human(return_result=True)
     prettyos = updates_check.pretty_os()
-    updates_file = "/tmp/syschk_updates.human"
-    if exists(updates_file):
-        with open(updates_file, "r") as f:
-            update_results = f.read()
-    else:
-        update_results = "🟠 Still loading..."
-
+    update_results = updates_check.final_human(cache_use=True, return_result=True)
+    
     console = Console()
     console.print(Panel.fit(
         "\n" +

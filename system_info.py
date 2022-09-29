@@ -1,9 +1,9 @@
 import re
 
 class Cpu():
+    __slots__ = "cpu_model", "cpu_cores", "cpu_sockets", "cpu_threads"
     def __init__(self):
         cpuinfo = Cpu.get_cpuinfo_linux()
-        
         self.cpu_model = cpuinfo["cpu_model"]
         self.cpu_cores = cpuinfo["cpu_cores"]
         self.cpu_sockets = cpuinfo["cpu_sockets"]
@@ -47,9 +47,9 @@ class Cpu():
 
 
 class Memory():
+    __slots__ = "mem_used", "mem_used_h", "mem_free", "mem_free_h", "mem_total", "mem_total_h"
     def __init__(self):
         meminfo = Memory.get_meminfo_linux()
-
         self.mem_used = meminfo["mem_used"]
         self.mem_used_h = meminfo["mem_used_h"]
         self.mem_free = meminfo["mem_free"]

@@ -290,60 +290,90 @@ def yum_check(dummy_data:bool = True) -> dict:
     return results
 
 
-def final_json(dummy_data:bool = False, save_file:bool = False, file_location:str = "/tmp/syschk_updates.json") -> None:
-    os_type = detect_os()
+def final_json(dummy_data:bool = False,
+                cache_file_location:str = "/tmp/syschk_updates.json",
+                cache_create:bool = False,
+                cache_use:bool = False,
+                cache_timeout:int = 900,
+                json_console_output:bool = True,
+            ) -> None:
 
     console = Console()
     with console.status("[bold blue]Working on it...[/]"):
-        if os_type == "deb":
-            json_input = deb_check(dummy_data=dummy_data)
-        elif os_type == "dnf":
-            json_input = dnf_check(dummy_data=dummy_data)
-        elif os_type == "yum":
-            json_input = yum_check(dummy_data=dummy_data)
-        else:
-            print(" ⛔ Your OS is not supported!", file=sys.stderr)
-            sys.exit(1)
-
+        if cache_use:
+            if exists(cache_file_location):
+                with open(cache_file_location, "r") as f:
+                    c_file = f.read()
+                    json_input = json.loads(c_file)
+                    json_input["cache_exists"] = True
+                    json_input["cache_up_to_date"] = True
+                    json_input["cache_created_on"] = "2022.01.01"
+            else:
+                print("Cache file could not be found!", file=sys.stderr)
+                sys.exit(1)
+        elif not cache_use:
+            os_type = detect_os()
+            if os_type == "deb":
+                json_input = deb_check(dummy_data=dummy_data)
+            elif os_type == "dnf":
+                json_input = dnf_check(dummy_data=dummy_data)
+            elif os_type == "yum":
+                json_input = yum_check(dummy_data=dummy_data)
+            else:
+                print(" ⛔ Your OS is not supported!", file=sys.stderr)
+                sys.exit(1)
+            
         json_output = json.dumps(json_input, indent=3, sort_keys=False)
-        if save_file:
-            if exists(file_location):
-                os.remove(file_location)
-            result = json_output
-            with open(file_location, "w") as f:
+        result = json_output
+        if cache_create:
+            if exists(cache_file_location):
+                os.remove(cache_file_location)
+            with open(cache_file_location, "w") as f:
                 f.write(result)
+
+        if json_console_output:
+            console.print(result)
         else:
-            console.print(json_output)
+            return result
 
 
-def final_human(dummy_data:bool = False, save_file:bool = False, file_location:str = "/tmp/syschk_updates.human") -> None:
-    os_type = detect_os()
+def final_human(dummy_data:bool = False,
+                cache_file_location:str = "/tmp/syschk_updates.json",
+                cache_create:bool = True,
+                cache_use:bool = False,
+                cache_timeout:int = 900,
+                return_result:bool = False,
+                no_output:bool = False
+            ) -> None:
 
     console = Console()
     with console.status("[bold blue]Working on it...[/]"):
-        if os_type == "deb":
-            json_input = deb_check(dummy_data=dummy_data)
-        elif os_type == "dnf":
-            json_input = dnf_check(dummy_data=dummy_data)
-        elif os_type == "yum":
-            json_input = yum_check(dummy_data=dummy_data)
-        else:
-            print(" ⛔ Your OS is not supported!", file=sys.stderr)
-            sys.exit(1)
+        if cache_use:
+            if exists(cache_file_location):
+                with open(cache_file_location, "r") as f:
+                    c_file = f.read()
+                    json_input = json.loads(c_file)
+            else:
+                if return_result:
+                    return "🟠 [yellow]Update cache file doesn't exist![/]\n   Please create it by running [green]syschecks --cache-create --no-output[/]"
+                else:
+                    print("Update cache file could not be found!", file=sys.stderr)
+                    sys.exit(1)
+        elif cache_create:
+            c_file = final_json(cache_create=cache_create, cache_file_location=cache_file_location, json_console_output=False, dummy_data=dummy_data)
+            json_input = json.loads(c_file)
 
         system_updates = json_input["system_updates"]
         security_updates = json_input["security_updates"]
 
-        if save_file:
-            if exists(file_location):
-                os.remove(file_location)
+        if no_output:
+            return
 
         if system_updates > 0 and security_updates > 0:
-            if save_file:
+            if return_result:
                 space = ""
                 result = space + "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates) + "\n" + space + "[red]🔴 Including a number of security updates: [/]" + str(security_updates)
-                with open(file_location, "w") as f:
-                    f.write(result)
+                return result
             else:
                 space = " "
                 result = space + "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates) + "\n" + space + "[red]🔴 Including a number of security updates: [/]" + str(security_updates)
@@ -351,25 +381,22 @@ def final_human(dummy_data:bool = False, save_file:bool = False, file_location:s
 
         elif system_updates > 0:
             result = "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates)
-            if save_file:
-                with open(file_location, "w") as f:
-                    f.write(result)
+            if return_result:
+                return result
             else:
                 console.print(" " + result)
 
         elif security_updates > 0:
             result = "[red]🔴 There is a number of security updates available: [/]" + str(security_updates)
-            if save_file:
-                with open(file_location, "w") as f:
-                    f.write(result)
+            if return_result:
+                return result
             else:
                 console.print(" " + result)
 
         elif system_updates == 0 and security_updates == 0:
             result = "[blue]🟢 The system is up to date.[/] Well done!"
-            if save_file:
-                with open(file_location, "w") as f:
-                    f.write(result)
+            if return_result:
+                return result
             else:
                 console.print(" " + result)
 
