@@ -2,6 +2,7 @@ import re
 import os
 import sys
 import json
+import datetime
 import subprocess
 from os.path import exists
 
@@ -306,8 +307,13 @@ def final_json(dummy_data:bool = False,
                     c_file = f.read()
                     json_input = json.loads(c_file)
                     json_input["cache_exists"] = True
-                    json_input["cache_up_to_date"] = True
-                    json_input["cache_created_on"] = "2022.01.01"
+                    file_creatition_time = os.path.getctime(cache_file_location)
+                    file_creatition_time = datetime.datetime.fromtimestamp(file_creatition_time)
+                    json_input["cache_created_on"] = file_creatition_time.strftime("%Y-%m-%d_%H-%M-%S")
+                    if (datetime.datetime.now() - datetime.timedelta(minutes=cache_timeout)) < file_creatition_time:
+                        json_input["cache_up_to_date"] = True
+                    else:
+                        json_input["cache_up_to_date"] = False
             else:
                 print("Cache file could not be found!", file=sys.stderr)
                 sys.exit(1)
@@ -353,6 +359,14 @@ def final_human(dummy_data:bool = False,
                 with open(cache_file_location, "r") as f:
                     c_file = f.read()
                     json_input = json.loads(c_file)
+                    json_input["cache_exists"] = True
+                    file_creatition_time = os.path.getctime(cache_file_location)
+                    file_creatition_time = datetime.datetime.fromtimestamp(file_creatition_time)
+                    json_input["cache_created_on"] = file_creatition_time.strftime("%Y-%m-%d_%H-%M-%S")
+                    if (datetime.datetime.now() - datetime.timedelta(minutes=cache_timeout)) < file_creatition_time:
+                        json_input["cache_up_to_date"] = True
+                    else:
+                        json_input["cache_up_to_date"] = False
             else:
                 if return_result:
                     return "🟠 [yellow]Update cache file doesn't exist![/]\n   Please create it by running [green]syschecks --cache-create --no-output[/]"
@@ -366,6 +380,8 @@ def final_human(dummy_data:bool = False,
         system_updates = json_input["system_updates"]
         security_updates = json_input["security_updates"]
 
+        cache_up_to_date = json_input.get("cache_up_to_date", True)
+
         if no_output:
             return
 
@@ -373,14 +389,21 @@ def final_human(dummy_data:bool = False,
             if return_result:
                 space = ""
                 result = space + "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates) + "\n" + space + "[red]🔴 Including a number of security updates: [/]" + str(security_updates)
+                if not cache_up_to_date:
+                    result = result + "\n\n" + space +  "[red]🔴 Your cache file is out of date!"
                 return result
             else:
                 space = " "
                 result = space + "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates) + "\n" + space + "[red]🔴 Including a number of security updates: [/]" + str(security_updates)
+                if not cache_up_to_date:
+                    result = result + "\n\n" + space + "[red]🔴 Your cache file is out of date!"
                 console.print(result)
 
         elif system_updates > 0:
             result = "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates)
+            if not cache_up_to_date:
+                result = result + "\n [red]🔴 Your cache file is out of date!"
+            
             if return_result:
                 return result
             else:
@@ -388,6 +411,9 @@ def final_human(dummy_data:bool = False,
 
         elif security_updates > 0:
             result = "[red]🔴 There is a number of security updates available: [/]" + str(security_updates)
+            if not cache_up_to_date:
+                result = result + "\n [red]🔴 Your cache file is out of date!"
+            
             if return_result:
                 return result
             else:
@@ -395,6 +421,9 @@ def final_human(dummy_data:bool = False,
 
         elif system_updates == 0 and security_updates == 0:
             result = "[blue]🟢 The system is up to date.[/] Well done!"
+            if not cache_up_to_date:
+                result = result + "\n [red]🔴 Your cache file is out of date!"
+            
             if return_result:
                 return result
             else:

@@ -33,7 +33,8 @@ if [[ -f /bin/syschecks ]]; then
 fi
 ln syschecks /bin/syschecks
 
-syschecks updates --save-file
+syschecks updates --cache-create --no-output
+syschecks cron-init
 syschecks
 
 echo

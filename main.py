@@ -1,17 +1,18 @@
 from os.path import exists
-import re
-import os
-import sys
 import datetime
+import sys
+import os
+import re
 
-import typer
-from rich.panel import Panel
 from rich.console import Console
+from rich.panel import Panel
 import invoke
+import typer
 
-import kernel_check
 import updates_check
+import kernel_check
 import system_info
+
 
 
 app = typer.Typer()
@@ -71,6 +72,7 @@ def self_update():
                         console.print("[green]SysChecks is already up-to-date!")
                     elif not re_out_1.match(value) and (index + 1) == len(git_output):
                         console.print("[green]SysChecks was updated succesfully!")
+                        cron_init()
 
         except invoke.exceptions.UnexpectedExit as e:
             re_err_1 = re.compile(".*not a git repository.*")
@@ -83,7 +85,6 @@ def self_update():
                     console = Console(stderr=True)
                     console.print("[red]/opt/syschecks/ is not a Git repo folder![/]\nPlease remove the folder and install [green]SysChecks[/] again.")
                     sys.exit(1)
-    cron_init()
 
 
 @app.command()
@@ -104,7 +105,8 @@ def cron_init():
 
     cron_job_generation_date = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     cron_jobs_list.append("\n# THIS JOB FILE WAS GENERATED ON: " + cron_job_generation_date)
-    
+    cron_jobs_list.append("MAILTO=\"\"")
+
     cron_job_1 = "@reboot root sleep 10 && syschecks updates --cache-create --no-output"
     cron_job_2 = "7 */12 * * * root syschecks updates --cache-create --no-output"
     cron_job_3 = "17 9 */3 * * root syschecks self-update"
