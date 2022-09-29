@@ -153,8 +153,7 @@ def login_view():
         "\n[white]" +
         "[blue]💻 OS installed:[/] " + prettyos +
         "\n"
-        "[blue]📡 Hostname:[/] " + hostname +
-        "[blue] Machine IPs:[/] "  + str(ip_address_list) +
+        "[blue]📡 Hostname:[/] " + hostname + "  [blue] Machine IPs:[/] "  + str(ip_address_list) +
         "\n"
         "[blue]🤖 CPU Cores:[/] " + str(cpu_cores) + " cores, " + cpu_threads + " threads  (" + cpu_model + ")" +
         "\n"
