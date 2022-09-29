@@ -1,4 +1,5 @@
 import re
+import invoke
 
 class Cpu():
     __slots__ = "cpu_model", "cpu_cores", "cpu_sockets", "cpu_threads"
@@ -96,3 +97,35 @@ class Memory():
         meminfo["mem_total_h"] = str(meminfo["mem_total_h"]) + "G"
 
         return meminfo
+
+
+
+class NetworkInfo():
+    __slots__ = "ip_address_list", "hostname"
+
+    def __init__(self, get_ip:bool = False, get_hostname:bool = False):
+        if get_ip:
+            self.ip_address_list = NetworkInfo.ip_address_linux()
+        if get_hostname:
+            self.hostname = NetworkInfo.hostname_linux()
+
+
+    @staticmethod
+    def ip_address_linux() -> list:
+        command = "hostname -I"
+        result = invoke.run(command, hide=True)
+        ip_address_list = result.stdout.split(" ")
+        for i in ip_address_list:
+            if i == "\n":
+                ip_address_list.remove(i)
+
+        return ip_address_list
+
+
+    @staticmethod
+    def hostname_linux() -> str:
+        command = "hostname -f"
+        result = invoke.run(command, hide=True)
+        hostname = result.stdout.splitlines()[0]
+
+        return hostname

@@ -139,6 +139,9 @@ def login_view():
     mem_free = meminfo.mem_free_h
     mem_used = meminfo.mem_used_h
 
+    ip_address_list = system_info.NetworkInfo(get_ip=True).ip_address_list
+    hostname = system_info.NetworkInfo(get_hostname=True).hostname
+
     kernel_results = kernel_check.final_human(return_result=True)
     prettyos = updates_check.pretty_os()
     update_results = updates_check.final_human(cache_use=True, return_result=True)
@@ -148,12 +151,15 @@ def login_view():
         "\n" +
         "🔥 [green]System info[/] 🔥" +
         "\n[white]" +
-        "[blue]💻 OS installed: [/]" + prettyos +
+        "[blue]💻 OS installed:[/] " + prettyos +
         "\n"
-        "[blue]🤖 CPU Cores: [/]" + str(cpu_cores) + " cores, " + cpu_threads + " threads  (" + cpu_model + ")" +
+        "[blue]📡 Hostname:[/] " + hostname +
+        "[blue] Machine IPs:[/] "  + str(ip_address_list) +
         "\n"
-        "[blue]🧠 Memory: [/]" + str(mem_used) + "(used)/" + str(mem_total) + "(total)" +
-        "\n[/]" +
+        "[blue]🤖 CPU Cores:[/] " + str(cpu_cores) + " cores, " + cpu_threads + " threads  (" + cpu_model + ")" +
+        "\n"
+        "[blue]🧠 Memory:[/] " + str(mem_used) + "(used)/" + str(mem_total) + "(total)" +
+        "\n" +
         "\n" +
         "🔥 [green]Kernel reboot status[/] 🔥" +
         "\n[white]" +
