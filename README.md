@@ -27,3 +27,9 @@ sudo su -
 curl https://raw.githubusercontent.com/yaroslav-gwit/SysChecks/main/install.sh | bash
 # or with `bash -x` to turn on the debug mode
 ```
+
+# Roadmap
+- fwupd intergration to inform the enduser/admin about the firmware updates
+- disk space checks to show up at the login sreen if there are disks with less than 10% free space
+- system update integration to automate system and security updates across the estate
+- FreeBSD integration
