@@ -11,6 +11,7 @@ from invoke import run
 import invoke
 
 
+
 def detect_os() -> str:
     os_release_input = "/etc/os-release"
     if exists(os_release_input):
@@ -291,13 +292,9 @@ def yum_check(dummy_data:bool = True) -> dict:
     return results
 
 
-def final_json(dummy_data:bool = False,
-                cache_file_location:str = "/tmp/syschk_updates.json",
-                cache_create:bool = False,
-                cache_use:bool = False,
-                cache_timeout:int = 900,
-                json_console_output:bool = True,
-            ) -> None:
+def final_json(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_updates.json",
+                cache_create:bool = False, cache_use:bool = False, cache_timeout:int = 900,
+                json_console_output:bool = True) -> None:
 
     console = Console()
     with console.status("[bold blue]Working on it...[/]"):
@@ -309,7 +306,8 @@ def final_json(dummy_data:bool = False,
                     json_input["cache_exists"] = True
                     file_creatition_time = os.path.getctime(cache_file_location)
                     file_creatition_time = datetime.datetime.fromtimestamp(file_creatition_time)
-                    json_input["cache_created_on"] = file_creatition_time.strftime("%Y-%m-%d_%H-%M-%S")
+                    # json_input["cache_created_on"] = file_creatition_time.strftime("%Y-%m-%d_%H-%M-%S")
+                    json_input["cache_created_on"] = file_creatition_time.strftime("%Y-%m-%d %H:%M:%S")
                     if (datetime.datetime.now() - datetime.timedelta(minutes=cache_timeout)) < file_creatition_time:
                         json_input["cache_up_to_date"] = True
                     else:
@@ -343,14 +341,9 @@ def final_json(dummy_data:bool = False,
             return result
 
 
-def final_human(dummy_data:bool = False,
-                cache_file_location:str = "/tmp/syschk_updates.json",
-                cache_create:bool = True,
-                cache_use:bool = False,
-                cache_timeout:int = 900,
-                return_result:bool = False,
-                no_output:bool = False
-            ) -> None:
+def final_human(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_updates.json",
+                cache_create:bool = True, cache_use:bool = False, cache_timeout:int = 900,
+                return_result:bool = False, no_output:bool = False) -> None:
 
     console = Console()
     with console.status("[bold blue]Working on it...[/]"):
@@ -362,7 +355,7 @@ def final_human(dummy_data:bool = False,
                     json_input["cache_exists"] = True
                     file_creatition_time = os.path.getctime(cache_file_location)
                     file_creatition_time = datetime.datetime.fromtimestamp(file_creatition_time)
-                    json_input["cache_created_on"] = file_creatition_time.strftime("%Y-%m-%d_%H-%M-%S")
+                    json_input["cache_created_on"] = file_creatition_time.strftime("%Y-%m-%d %H:%M:%S")
                     if (datetime.datetime.now() - datetime.timedelta(minutes=cache_timeout)) < file_creatition_time:
                         json_input["cache_up_to_date"] = True
                     else:
@@ -379,7 +372,6 @@ def final_human(dummy_data:bool = False,
 
         system_updates = json_input["system_updates"]
         security_updates = json_input["security_updates"]
-
         cache_up_to_date = json_input.get("cache_up_to_date", True)
 
         if no_output:
@@ -400,34 +392,41 @@ def final_human(dummy_data:bool = False,
                 console.print(result)
 
         elif system_updates > 0:
-            result = "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates)
-            if not cache_up_to_date:
-                result = result + "\n [red]🔴 Your cache file is out of date!"
-            
             if return_result:
+                result = "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates)
+                if not cache_up_to_date:
+                    result = result + "\n[red]🔴 Your cache file is out of date!"
                 return result
             else:
-                console.print(" " + result)
+                result = " [yellow]🟡 There is a number of system updates available: [/]" + str(system_updates)
+                if not cache_up_to_date:
+                    result = result + "\n [red]🔴 Your cache file is out of date!"
+                console.print(result)
 
         elif security_updates > 0:
-            result = "[red]🔴 There is a number of security updates available: [/]" + str(security_updates)
-            if not cache_up_to_date:
-                result = result + "\n [red]🔴 Your cache file is out of date!"
-            
             if return_result:
+                result = "[red]🔴 There is a number of security updates available: [/]" + str(security_updates)
+                if not cache_up_to_date:
+                    result = result + "\n[red]🔴 Your cache file is out of date!"
                 return result
             else:
-                console.print(" " + result)
+                result = " [red]🔴 There is a number of security updates available: [/]" + str(security_updates)
+                if not cache_up_to_date:
+                    result = result + "\n [red]🔴 Your cache file is out of date!"
+                console.print(result)
 
         elif system_updates == 0 and security_updates == 0:
-            result = "[blue]🟢 The system is up to date.[/] Well done!"
-            if not cache_up_to_date:
-                result = result + "\n [red]🔴 Your cache file is out of date!"
-            
             if return_result:
+                result = "[blue]🟢 The system is up to date.[/] Well done!"
+                if not cache_up_to_date:
+                    result = result + "\n[red]🔴 Your cache file is out of date!"
                 return result
             else:
-                console.print(" " + result)
+                result = " [blue]🟢 The system is up to date.[/] Well done!"
+                if not cache_up_to_date:
+                    result = result + "\n [red]🔴 Your cache file is out of date!"
+                console.print(result)
+
 
 
 if __name__ == "__main__":
