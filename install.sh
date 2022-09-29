@@ -33,11 +33,5 @@ if [[ -f /bin/syschecks ]]; then
 fi
 ln syschecks /bin/syschecks
 
-syschecks updates --cache-create --no-output
-syschecks --install-completion
-syschecks cron-init
-syschecks
-
-echo
-echo
-echo "The software has been installed!"
+syschecks updates --cache-create --no-output && syschecks --install-completion && syschecks cron-init
+(syschecks && echo && echo "The software is now installed!" && echo && exit 0) || (echo "Software installation failed! Try again..." && exit 1)

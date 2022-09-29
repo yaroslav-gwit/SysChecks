@@ -22,10 +22,14 @@ Updates check uses dnf, yum or apt (depending on the OS) to get a list of availa
 
 # Installation
 If you'd like to install SysChecks on your server, just run the command below:
+ > or with `bash -x syschecks_install.sh` to turn on the debug mode
 ```
 sudo su -
-curl https://raw.githubusercontent.com/yaroslav-gwit/SysChecks/main/install.sh | bash
-# or with `bash -x` to turn on the debug mode
+curl https://raw.githubusercontent.com/yaroslav-gwit/SysChecks/main/install.sh > /root/syschecks_install.sh && bash syschecks_install.sh
+```
+Remove the installation script after you are done:
+```
+rm -f /root/syschecks_install.sh
 ```
 
 # Roadmap

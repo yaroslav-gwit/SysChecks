@@ -120,7 +120,7 @@ def cron_init():
         f.write(final_result)
 
     if exists(file_location):
-        Console().print("[green]The new cron.d file has been created: [/]" + file_location)
+        Console().print("[green]The new SysChecks cron.d file was created at: [/]" + file_location)
     else:
         Console().print("[red]Could not create a new cron.d file at: [/]" + file_location)
 
