@@ -34,6 +34,7 @@ fi
 ln syschecks /bin/syschecks
 
 syschecks updates --cache-create --no-output
+syschecks --install-completion
 syschecks cron-init
 syschecks
 
