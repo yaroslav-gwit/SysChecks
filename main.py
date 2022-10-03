@@ -1,5 +1,6 @@
 from os.path import exists
 import datetime
+import json
 import sys
 import os
 import re
@@ -62,9 +63,9 @@ def self_update():
 
     with console.status("[bold blue]Working on it...[/]"):
         try:
-            result = invoke.run("git pull", hide=True)
-            if result.ok:
-                git_output = result.stdout.splitlines()
+            git_result = invoke.run("git pull", hide=True)
+            if git_result.ok:
+                git_output = git_result.stdout.splitlines()
                 re_out_1 = re.compile(".*Already up to date.*")
                 re_out_2 = re.compile(".*Already up-to-date.*")
                 for index, value in enumerate(git_output):
@@ -75,18 +76,30 @@ def self_update():
                     elif not re_out_1.match(value) and (index + 1) == len(git_output):
                         console.print("[green]SysChecks was updated succesfully!")
                         cron_init()
-
         except invoke.exceptions.UnexpectedExit as e:
             re_err_1 = re.compile(".*not a git repository.*")
-            if e.result.stdout:
-                git_output = e.result.stdout.splitlines()
-            elif e.result.stderr:
-                git_output = e.result.stderr.splitlines()
+            if e.git_result.stdout:
+                git_output = e.git_result.stdout.splitlines()
+            elif e.git_result.stderr:
+                git_output = e.git_result.stderr.splitlines()
             for i in git_output:
                 if re_err_1.match(i):
                     console = Console(stderr=True)
                     console.print("[red]/opt/syschecks/ is not a Git repo folder![/]\nPlease remove the folder and install [green]SysChecks[/] again.")
                     sys.exit(1)
+
+        try:
+            pip_result = invoke.run("venv/bin/python3 -m pip install -r requirements.txt --upgrade", hide=True)
+            if pip_result.ok:
+                pip_output = git_result.stdout.splitlines()
+                console.print("[green]Pip dependencies were upgraded!")
+        except invoke.exceptions.UnexpectedExit as e:
+            if e.git_result.stdout:
+                git_output = e.git_result.stdout.splitlines()
+                console.print("[green]Pip dependencies upgrade failed for some reason! Error: " + git_output)
+            elif e.git_result.stderr:
+                git_output = e.git_result.stderr.splitlines()
+                console.print("[green]Pip dependencies upgrade failed for some reason! Error: " + git_output)
 
 
 @app.command()
@@ -128,6 +141,32 @@ def cron_init():
 
 
 @app.command()
+def userinfo(json_pretty:bool = typer.Option(False, help="Pretty JSON output"),
+    ):
+    """ Prints out user related information """
+    user_info = system_info.Users().get_user_info()
+
+    if json_pretty:
+        Console().print_json(json.dumps(user_info), indent = 3, sort_keys=False)
+    else:
+        print(json.dumps(user_info, sort_keys=False))
+
+
+@app.command()
+def sysinfo(json_pretty:bool = typer.Option(False, help="Pretty JSON output"),
+    ):
+    
+    """ Print out system related information: CPU, Network, RAM, Users, etc """
+
+    sysinfo = system_info.json_return()
+    json_output = json.dumps(sysinfo, sort_keys = False)
+    if json_pretty:
+        Console().print_json(json_output, indent = 3, sort_keys=False)
+    else:
+        print(json_output)
+
+
+@app.command()
 def login_view():
     """ Show a pretty login banner """
 
@@ -141,8 +180,9 @@ def login_view():
     mem_free = meminfo.mem_free_h
     mem_used = meminfo.mem_used_h
 
-    ip_address_list = system_info.NetworkInfo(get_ip=True).ip_address_list
-    hostname = system_info.NetworkInfo(get_hostname=True).hostname
+    net_info = system_info.NetworkInfo()
+    ip_address_list = net_info.ip_address_list[0:3]
+    hostname = net_info.hostname
 
     kernel_results = kernel_check.final_human(return_result=True)
     prettyos = updates_check.pretty_os()

@@ -1,7 +1,8 @@
 import re
 import invoke
+import os
 
-class Cpu():
+class Cpu:
     __slots__ = "cpu_model", "cpu_cores", "cpu_sockets", "cpu_threads"
     def __init__(self):
         cpuinfo = Cpu.get_cpuinfo_linux()
@@ -47,7 +48,7 @@ class Cpu():
 
 
 
-class Memory():
+class Memory:
     __slots__ = "mem_used", "mem_used_h", "mem_free", "mem_free_h", "mem_total", "mem_total_h"
     def __init__(self):
         meminfo = Memory.get_meminfo_linux()
@@ -100,14 +101,12 @@ class Memory():
 
 
 
-class NetworkInfo():
+class NetworkInfo:
     __slots__ = "ip_address_list", "hostname"
 
-    def __init__(self, get_ip:bool = False, get_hostname:bool = False):
-        if get_ip:
-            self.ip_address_list = NetworkInfo.ip_address_linux()
-        if get_hostname:
-            self.hostname = NetworkInfo.hostname_linux()
+    def __init__(self):
+        self.ip_address_list = NetworkInfo.ip_address_linux()
+        self.hostname = NetworkInfo.hostname_linux()
 
 
     @staticmethod
@@ -129,3 +128,116 @@ class NetworkInfo():
         hostname = result.stdout.splitlines()[0]
 
         return hostname
+
+
+class Users:
+    def __init__(self):
+        self.sudo_info = Users.get_sudo_info()
+        if os.getuid() != 0:
+            print("You have to run this script as root!", file=sys.stderr)
+            sys.exit(1)
+
+    def get_user_info(self) -> dict:
+        with open("/etc/passwd", "r") as f:
+            passwd_info_list = f.read().splitlines()
+
+        password_info = []
+        for i in passwd_info_list:
+            if i:
+                password_info.append(i)
+
+        ignore_list = [
+            "daemon", "bin", "sys", "sync", "games", "man", "lp", "mail", "news", "uucp", "proxy", "backup", "list",
+            "www-data", "systemd-coredump", "sshd", "messagebus", "nobody", "systemd-resolve", "systemd-network", "irc", "_apt",
+            "systemd-timesync", "gnats"
+        ]
+        ignore_list = set(ignore_list); ignore_list = list(ignore_list)
+
+        for remove_item in ignore_list:
+            for password_item in password_info:
+                if remove_item == password_item.split(":")[0]:
+                    password_info.remove(password_item)
+
+        user_dict = []
+        for i in password_info:
+            temp_dict = {}
+            user_item = i.split(":")
+            temp_dict["username"] = user_item[0]
+            temp_dict["full_name"] = user_item[4]
+            temp_dict["home_dir"] = user_item[5] + "/"
+            temp_dict["shell"] = user_item[6]
+
+            command = "groups " + temp_dict["username"]
+            result = invoke.run(command, hide=True)
+            temp_dict["user_groups"] = result.stdout.split(" : ")[1].strip("\n").split(" ")
+
+            temp_dict["sudo_access"] = False
+            for group in self.sudo_info["groups"]:
+                if group in temp_dict["user_groups"]:
+                    temp_dict["sudo_access"] = True
+            for user in self.sudo_info["users"]:
+                if user == temp_dict["username"]:
+                    temp_dict["sudo_access"] = True
+            user_dict.append(temp_dict)
+
+        return user_dict
+
+
+    @staticmethod
+    def get_sudo_info() -> dict:
+        with open("/etc/sudoers", "r") as f:
+            sudoers_file = f.read().splitlines()
+
+        re_ignore_1 = re.compile(".*Defaults.*")
+        re_ignore_2 = re.compile("^#")
+        re_ignore_3 = re.compile("^@include")
+        re_match_group = re.compile("^%")
+
+        sudo_users = []
+        sudo_groups = []
+        for line in sudoers_file:
+            if line:
+                if re_ignore_1.match(line):
+                    continue
+                elif re_ignore_2.match(line):
+                    continue
+                elif re_ignore_3.match(line):
+                    continue
+                elif re_match_group.match(line):
+                    line = line.split("\t")[0].strip("%")
+                    sudo_groups.append(line)
+                else:
+                    line = line.split("\t")[0]
+                    sudo_users.append(line)
+        
+        sudo_dict = {}
+        sudo_dict["groups"] = []
+        for group in sudo_groups:
+            sudo_dict["groups"].append(group)
+        sudo_dict["users"] = []
+        for user in sudo_users:
+            sudo_dict["users"].append(user)
+        
+        return sudo_dict
+
+
+def json_return() -> dict:
+    output_dict = {}
+
+    net_info = NetworkInfo()
+    output_dict["hostname"] = net_info.hostname
+    output_dict["ip_address_list"] = net_info.ip_address_list
+
+    cpu_info = Cpu()
+    output_dict["cpu_model"] = cpu_info.cpu_model
+    output_dict["cpu_cores"] = cpu_info.cpu_cores
+    output_dict["cpu_sockets"] = cpu_info.cpu_sockets
+    output_dict["cpu_threads"] = cpu_info.cpu_threads
+    # output_dict = {**output_dict, **cpu_info}
+
+    mem_info = Memory()
+    output_dict["ram_free"] = mem_info.mem_free
+    output_dict["ram_total"] = mem_info.mem_total
+    output_dict["ram_used"] = mem_info.mem_used
+
+    return output_dict
