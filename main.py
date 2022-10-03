@@ -21,9 +21,9 @@ def kern(
     json_output:bool = typer.Option(False, help="Show JSON output", show_default = False),
     ):
     """ Kernel related checks """
-    if not json:
+    if not json_output:
         kernel_check.final_human()
-    elif json:
+    elif json_output:
         kernel_check.final_json()
 
 
