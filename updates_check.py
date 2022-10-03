@@ -294,7 +294,7 @@ def yum_check(dummy_data:bool = True) -> dict:
 
 def final_json(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_updates.json",
                 cache_create:bool = False, cache_use:bool = False, cache_timeout:int = 900,
-                json_console_output:bool = True) -> None:
+                json_console_output:bool = True, json_pretty = False) -> None:
 
     console = Console()
     with console.status("[bold blue]Working on it...[/]"):
@@ -328,16 +328,23 @@ def final_json(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_u
                 sys.exit(1)
             
         json_output = json.dumps(json_input, indent=3, sort_keys=False)
-        json_output_file = json.dumps(json_input, sort_keys=False)
-        result = json_output
+        json_output_no_format = json.dumps(json_input, sort_keys=False)
+        if json_pretty:
+            result = json_output
+        else:
+            result = json_output_no_format
+        
         if cache_create:
             if exists(cache_file_location):
                 os.remove(cache_file_location)
             with open(cache_file_location, "w") as f:
-                f.write(json_output_file)
+                f.write(json_output_no_format)
 
         if json_console_output:
-            console.print(result)
+            if json_pretty:
+                console.print(result)
+            else:
+                print(result)
         else:
             return result
 
