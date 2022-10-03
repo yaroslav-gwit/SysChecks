@@ -43,3 +43,5 @@ rm -f /root/syschecks_install.sh
 - system update integration to automate system and security updates across the estate
 - FreeBSD integration
 - unified JSON output for all included functions
+- publish Zabbix Templates for LTS versions 5 and 6
+- make a YT video about the SysChecks usage and usecases
