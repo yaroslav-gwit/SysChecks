@@ -18,7 +18,7 @@ import system_info
 app = typer.Typer()
 @app.command()
 def kern(
-    json:bool = typer.Option(False, help="Show JSON output", show_default = False),
+    json_output:bool = typer.Option(False, help="Show JSON output", show_default = False),
     ):
     """ Kernel related checks """
     if not json:
