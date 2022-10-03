@@ -18,13 +18,14 @@ import system_info
 app = typer.Typer()
 @app.command()
 def kern(
-    json_output:bool = typer.Option(True, help="Show JSON output", show_default = False),
+    json_output:bool = typer.Option(True, help="JSON output", show_default = False),
+    json_pretty:bool = typer.Option(False, help="Show pretty JSON output", show_default = False),
     ):
     """ Kernel related checks """
     if not json_output:
         kernel_check.final_human()
     elif json_output:
-        kernel_check.final_json()
+        kernel_check.final_json(json_pretty=json_pretty)
 
 
 @app.command()

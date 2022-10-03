@@ -44,7 +44,7 @@ def get_installed_kernels() -> list:
     return kernel_list
 
 
-def final_json(save_file:bool = False, file_location:str = "/tmp/syschk_kern.json") -> None:
+def final_json(save_file:bool = False, file_location:str = "/tmp/syschk_kern.json", json_pretty:bool = True) -> None:
     console = Console()
 
     running_kernel = get_running_kernel()
@@ -67,8 +67,13 @@ def final_json(save_file:bool = False, file_location:str = "/tmp/syschk_kern.jso
     results["latest_installed_kernel"] = latest_installed_kernel
     results["list_of_installed_kernels"] = installed_kernels
 
-    json_output = json.dumps(results, indent=3)
-    console.print(json_output)
+    json_output_pretty = json.dumps(results, indent=3)
+    json_output = json.dumps(results)
+
+    if json_pretty:
+        console.print(json_output_pretty)
+    else:
+        print(json_output)
 
 
 def final_human(return_result:bool = False) -> None:
