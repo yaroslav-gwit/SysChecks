@@ -328,12 +328,13 @@ def final_json(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_u
                 sys.exit(1)
             
         json_output = json.dumps(json_input, indent=3, sort_keys=False)
+        json_output_file = json.dumps(json_input, sort_keys=False)
         result = json_output
         if cache_create:
             if exists(cache_file_location):
                 os.remove(cache_file_location)
             with open(cache_file_location, "w") as f:
-                f.write(result)
+                f.write(json_output_file)
 
         if json_console_output:
             console.print(result)
