@@ -18,7 +18,7 @@ import system_info
 app = typer.Typer()
 @app.command()
 def kern(
-    json_output:bool = typer.Option(False, help="Show JSON output", show_default = False),
+    json_output:bool = typer.Option(True, help="Show JSON output", show_default = False),
     ):
     """ Kernel related checks """
     if not json_output:
@@ -33,7 +33,7 @@ def updates(
     cache_create:bool = typer.Option(False, help="Create a JSON file on disk to read the data from"),
     cache_use:bool = typer.Option(True, help="Use JSON file as a cache (don't start a fresh check)"),
     cache_timeout:int = typer.Option(900, help="Time (in minutes) to check if cache is valid (15 hours by default)"),
-    json_output:bool = typer.Option(False, help="Show JSON output"),
+    json_output:bool = typer.Option(True, help="Show JSON output"),
     no_output:bool = typer.Option(False, help="No console output"),
     dummy_data:bool = typer.Option(False, help="Use dummy data to test/debug the app"),
     ):
