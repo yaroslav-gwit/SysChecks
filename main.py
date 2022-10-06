@@ -142,9 +142,10 @@ def cron_init():
 
 @app.command()
 def userinfo(json_pretty:bool = typer.Option(False, help="Pretty JSON output"),
+            debug:bool = typer.Option(False, help="Print out the debug info"),
     ):
     """ Prints out user related information """
-    user_info = system_info.Users().get_user_info()
+    user_info = system_info.Users(debug=debug).get_user_info()
 
     if json_pretty:
         Console().print_json(json.dumps(user_info), indent = 3, sort_keys=False)

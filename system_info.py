@@ -131,8 +131,10 @@ class NetworkInfo:
 
 
 class Users:
-    def __init__(self):
-        self.sudo_info = Users.get_sudo_info()
+    def __init__(self, debug:bool = False):
+        self.sudo_info = Users.get_sudo_info(debug=debug)
+        self.debug = debug
+
         if os.getuid() != 0:
             print("You have to run this script as root!", file=sys.stderr)
             sys.exit(1)
@@ -187,24 +189,21 @@ class Users:
 
 
     @staticmethod
-    def get_sudo_info() -> dict:
+    def get_sudo_info(debug:bool = False) -> dict:
         with open("/etc/sudoers", "r") as f:
             sudoers_file = f.read().splitlines()
 
         re_ignore_1 = re.compile(".*Defaults.*")
         re_ignore_2 = re.compile("^#")
         re_ignore_3 = re.compile("^@include")
+        re_ignore_4 = re.compile("^Cmnd_Alias")
         re_match_group = re.compile("^%")
 
         sudo_users = []
         sudo_groups = []
         for line in sudoers_file:
             if line:
-                if re_ignore_1.match(line):
-                    continue
-                elif re_ignore_2.match(line):
-                    continue
-                elif re_ignore_3.match(line):
+                if re_ignore_1.match(line) or re_ignore_2.match(line) or re_ignore_3.match(line) or re_ignore_4.match(line):
                     continue
                 elif re_match_group.match(line):
                     line = line.split("\t")[0].strip("%")
@@ -212,7 +211,7 @@ class Users:
                 else:
                     line = line.split("\t")[0]
                     sudo_users.append(line)
-        
+
         sudo_dict = {}
         sudo_dict["groups"] = []
         for group in sudo_groups:
@@ -220,7 +219,13 @@ class Users:
         sudo_dict["users"] = []
         for user in sudo_users:
             sudo_dict["users"].append(user)
-        
+
+        if debug:
+            print("[DEBUG: get_sudo_info FUNC]")
+            print("Users: " + str(sudo_dict["users"]))
+            print("Groups: " + str(sudo_dict["groups"]))
+            print("[DEBUG: get_sudo_info FUNC END]")
+
         return sudo_dict
 
 
