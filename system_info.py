@@ -7,8 +7,8 @@ class Cpu:
     def __init__(self):
         cpuinfo = Cpu.get_cpuinfo_linux()
         self.cpu_model = cpuinfo["cpu_model"]
-        self.cpu_cores = cpuinfo["cpu_cores"]
         self.cpu_sockets = cpuinfo["cpu_sockets"]
+        self.cpu_cores = cpuinfo["cpu_cores"]
         self.cpu_threads = cpuinfo["cpu_threads"]
 
 
@@ -20,12 +20,9 @@ class Cpu:
         re_cpu_model = re.compile(".*model name.*")
         re_cpu_model_sub = re.compile(".*model name.*:\s+")
         
-        # re_cpu_cores = re.compile(".*cpu cores.*")
-        # re_cpu_cores_sub = re.compile(".*cpu cores.*:\s")
-        re_cpu_cores = re.compile(".*processor.*")
-        re_cpu_cores_sub = re.compile(".*processor.*:\s")
+        re_cpu_cores = re.compile(".*cpu cores.*")
+        re_cpu_cores_sub = re.compile(".*cpu cores.*:\s")
 
-        re_cpu_sockets_list = []
         re_cpu_sockets = re.compile(".*physical id.*")
         re_cpu_sockets_sub = re.compile(".*physical id.*:\s")
 
@@ -39,21 +36,41 @@ class Cpu:
                 cpuinfo["cpu_model"] = i
             elif re_cpu_cores.match(i):
                 i = re_cpu_cores_sub.sub("", i)
-                cpuinfo["cpu_cores"] = str(int(i) + 1)
+                cpuinfo["cpu_cores"] = i
             elif re_cpu_sockets.match(i):
                 i = re_cpu_sockets_sub.sub("", i)
-                re_cpu_sockets_list.append(i)
                 cpuinfo["cpu_sockets"] = str(int(i) + 1)
             elif re_cpu_threads.match(i):
                 i = re_cpu_threads_sub.sub("", i)
                 cpuinfo["cpu_threads"] = i
 
-        for n, i in enumerate(re_cpu_sockets_list):
-            if int(i) == 0:
-                continue
-            elif int(i)-int(re_cpu_sockets_list[n-1]) != 1:
-                cpuinfo["cpu_sockets"] = "1 (a wild guess)"
-                break
+        if int(cpuinfo["cpu_sockets"]) > 1:
+            re_match_1 = re.compile(".*smp: Brought up.*")
+            re_sub_1 = re.compile(".*smp: Brought up.*")
+            re_sub_2 = re.compile(".* nodes,.*")
+            command = "dmesg | grep -i cpu"
+            result = invoke.run(command, hide=True)
+            dmesg_lines = result.stdout.split(" ")
+            for i in dmesg_lines:
+                if re_match_1.match(i):
+                    cpu_sockets = re_sub_1.sub("", i)
+                    cpu_sockets = re_sub_2.sub("", cpu_sockets)
+                    cpuinfo["cpu_sockets"] = str(cpu_sockets)
+                    break
+
+        if int(cpuinfo["cpu_cores"]) < 2:
+            re_match_1 = re.compile(".*smp: Brought up.*")
+            re_sub_1 = re.compile(".* node[s,]|,\s")
+            re_sub_2 = re.compile(" CPU.*")
+            command = "dmesg | grep -i cpu"
+            result = invoke.run(command, hide=True)
+            dmesg_lines = result.stdout.split(" ")
+            for i in dmesg_lines:
+                if re_match_1.match(i):
+                    cpu_cores = re_sub_1.sub("", i)
+                    cpu_cores = re_sub_2.sub("", cpu_cores)
+                    cpuinfo["cpu_cores"] = str(cpu_cores)
+                    break
 
         return cpuinfo
 
@@ -250,8 +267,8 @@ def json_return() -> dict:
 
     cpu_info = Cpu()
     output_dict["cpu_model"] = cpu_info.cpu_model
-    output_dict["cpu_cores"] = cpu_info.cpu_cores
     output_dict["cpu_sockets"] = cpu_info.cpu_sockets
+    output_dict["cpu_cores"] = cpu_info.cpu_cores
     output_dict["cpu_threads"] = cpu_info.cpu_threads
     # output_dict = {**output_dict, **cpu_info}
 

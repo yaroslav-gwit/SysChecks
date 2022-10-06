@@ -160,9 +160,10 @@ def sysinfo(json_pretty:bool = typer.Option(False, help="Pretty JSON output"),
     """ Print out system related information: CPU, Network, RAM, Users, etc """
 
     sysinfo = system_info.json_return()
-    json_output = json.dumps(sysinfo, sort_keys = False)
+    json_output = json.dumps(sysinfo, sort_keys=False)
+    
     if json_pretty:
-        Console().print_json(json_output, indent = 3, sort_keys=False)
+        Console().print_json(json_output, indent = 3)
     else:
         print(json_output)
 
