@@ -151,7 +151,8 @@ class Users:
         ignore_list = [
             "daemon", "bin", "sys", "sync", "games", "man", "lp", "mail", "news", "uucp", "proxy", "backup", "list",
             "www-data", "systemd-coredump", "sshd", "messagebus", "nobody", "systemd-resolve", "systemd-network", "irc", "_apt",
-            "systemd-timesync", "gnats"
+            "systemd-timesync", "gnats", "syslog", "tss", "uuidd", "tcpdump", "landscape", "pollinate", "lxd", "Debian-snmp",
+            "ntp", "usbmux", "postgres"
         ]
         ignore_list = set(ignore_list); ignore_list = list(ignore_list)
 
