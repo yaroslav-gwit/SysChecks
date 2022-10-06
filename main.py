@@ -74,6 +74,7 @@ def self_update():
                         console.print("[green]SysChecks was updated succesfully!")
                         sleep(1)
                         cron_init()
+                        sleep(1)
 
         except invoke.exceptions.UnexpectedExit as e:
             re_err_1 = re.compile(".*not a git repository.*")
