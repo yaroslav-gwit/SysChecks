@@ -37,18 +37,17 @@ def updates(
     cache_timeout:int = typer.Option(900, help="Time (in minutes) to check if cache is valid (15 hours by default)"),
     json_output:bool = typer.Option(True, help="JSON output"),
     json_pretty:bool = typer.Option(False, help="Show pretty JSON output"),
-    no_output:bool = typer.Option(False, help="No console output"),
     dummy_data:bool = typer.Option(False, help="Use dummy data to test/debug the app"),
     ):
     """ Updates related checks """
     if json_output:
         if cache_create:
             cache_use = False
-        updates_check.final_json(cache_file_location=cache_file_location, cache_create=cache_create, cache_use=cache_use, cache_timeout=cache_timeout, json_console_output = json_output, dummy_data=dummy_data, json_pretty=json_pretty)
+        updates_check.final_json(cache_file_location=cache_file_location, cache_create=cache_create, cache_use=cache_use, cache_timeout=cache_timeout, json_console_output=json_output, dummy_data=dummy_data, json_pretty=json_pretty)
     else:
         if cache_create:
             cache_use = False
-        updates_check.final_human(cache_file_location=cache_file_location, cache_create=cache_create, cache_use=cache_use, cache_timeout=cache_timeout, dummy_data=dummy_data, no_output=no_output)
+        updates_check.final_human(cache_file_location=cache_file_location, cache_create=cache_create, cache_use=cache_use, cache_timeout=cache_timeout, dummy_data=dummy_data)
 
 
 @app.command()

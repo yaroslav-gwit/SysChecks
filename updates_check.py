@@ -370,7 +370,7 @@ def final_human(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_
                         json_input["cache_up_to_date"] = False
             else:
                 if return_result:
-                    return "🟠 [yellow]Update cache file doesn't exist![/]\n   Please create it by running [green]syschecks --cache-create --no-output[/]"
+                    return "🟠 [yellow]Update cache file doesn't exist![/]\n   Please create it by running [green]syschecks updates --cache-create[/]"
                 else:
                     print("Update cache file could not be found!", file=sys.stderr)
                     sys.exit(1)
