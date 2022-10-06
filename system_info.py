@@ -194,7 +194,8 @@ class Users:
             "daemon", "bin", "sys", "sync", "games", "man", "lp", "mail", "news", "uucp", "proxy", "backup", "list",
             "www-data", "systemd-coredump", "sshd", "messagebus", "nobody", "systemd-resolve", "systemd-network", "irc", "_apt",
             "systemd-timesync", "gnats", "syslog", "tss", "uuidd", "tcpdump", "landscape", "pollinate", "lxd", "Debian-snmp",
-            "ntp", "usbmux", "postgres", "_chrony", "netdata", "ceph", "gluster", "statd", "postfix", "_rpc", 
+            "ntp", "usbmux", "postgres", "_chrony", "netdata", "ceph", "gluster", "statd", "postfix", "_rpc", "chrony", "polkitd",
+            "dbus", "ftp", "operator", "halt", "shutdown", "adm"
         ]
         ignore_list = set(ignore_list); ignore_list = list(ignore_list)
 
