@@ -206,10 +206,10 @@ class Users:
                 if re_ignore_1.match(line) or re_ignore_2.match(line) or re_ignore_3.match(line) or re_ignore_4.match(line):
                     continue
                 elif re_match_group.match(line):
-                    line = line.split("\t")[0].strip("%")
+                    line = line.split()[0].strip("%")
                     sudo_groups.append(line)
                 else:
-                    line = line.split("\t")[0]
+                    line = line.split()[0]
                     sudo_users.append(line)
 
         sudo_dict = {}
