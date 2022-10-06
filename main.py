@@ -72,9 +72,6 @@ def self_update():
                         console.print("[green]SysChecks is already up-to-date!")
                     elif not re_out_1.match(value) and (index + 1) == len(git_output):
                         console.print("[green]SysChecks was updated succesfully!")
-                        sleep(1)
-                        cron_init()
-                        sleep(1)
 
         except invoke.exceptions.UnexpectedExit as e:
             re_err_1 = re.compile(".*not a git repository.*")
@@ -87,6 +84,9 @@ def self_update():
                     console = Console(stderr=True)
                     console.print("[bright_red]/opt/syschecks/ is not a Git repo folder![/]\nPlease remove the folder and install [green]SysChecks[/] again.")
                     sys.exit(1)
+
+        # INIT ALL CRON JOBS AFTER THE UPDATE
+        cron_init()
 
         try:
             pip_result = invoke.run("venv/bin/python3 -m pip install -r requirements.txt --upgrade", hide=True)
