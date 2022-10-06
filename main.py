@@ -85,9 +85,6 @@ def self_update():
                     console.print("[bright_red]/opt/syschecks/ is not a Git repo folder![/]\nPlease remove the folder and install [green]SysChecks[/] again.")
                     sys.exit(1)
 
-        # INIT ALL CRON JOBS AFTER THE UPDATE
-        cron_init()
-
         try:
             pip_result = invoke.run("venv/bin/python3 -m pip install -r requirements.txt --upgrade", hide=True)
             if pip_result.ok:
@@ -100,6 +97,9 @@ def self_update():
             elif e.git_result.stderr:
                 git_output = e.git_result.stderr.splitlines()
                 console.print("[green]Pip dependencies upgrade failed for some reason! Error: " + git_output)
+
+    # INIT ALL CRON JOBS AFTER THE UPDATE
+    cron_init()
 
 
 @app.command()
@@ -138,8 +138,6 @@ def cron_init() -> None:
         Console().print("[green]The new SysChecks cron.d file was created at: [/]" + file_location)
     else:
         Console().print("[bright_red]Could not create a new cron.d file at: [/]" + file_location)
-    
-    sleep(1)
 
 
 @app.command()
