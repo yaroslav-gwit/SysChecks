@@ -44,31 +44,37 @@ class Cpu:
                 i = re_cpu_threads_sub.sub("", i)
                 cpuinfo["cpu_threads"] = i
 
-        if int(cpuinfo["cpu_sockets"]) > 1:
+        if int(cpuinfo["cpu_sockets"]) > 2:
+            # print("sockets")
             re_match_1 = re.compile(".*smp: Brought up.*")
-            re_sub_1 = re.compile(".*smp: Brought up.*")
-            re_sub_2 = re.compile(".* nodes,.*")
+            re_sub_1 = re.compile(".*smp: Brought up ")
+            re_sub_2 = re.compile(" node[s,].*|,.*")
             command = "dmesg | grep -i cpu"
             result = invoke.run(command, hide=True)
-            dmesg_lines = result.stdout.split(" ")
+            dmesg_lines = result.stdout.splitlines()
             for i in dmesg_lines:
                 if re_match_1.match(i):
+                    # print("sockets match!")
                     cpu_sockets = re_sub_1.sub("", i)
                     cpu_sockets = re_sub_2.sub("", cpu_sockets)
                     cpuinfo["cpu_sockets"] = str(cpu_sockets)
                     break
 
         if int(cpuinfo["cpu_cores"]) < 2:
+            # print("cores")
             re_match_1 = re.compile(".*smp: Brought up.*")
             re_sub_1 = re.compile(".* node[s,]|,\s")
             re_sub_2 = re.compile(" CPU.*")
+            re_sub_3 = re.compile("\s")
             command = "dmesg | grep -i cpu"
             result = invoke.run(command, hide=True)
-            dmesg_lines = result.stdout.split(" ")
+            dmesg_lines = result.stdout.splitlines()
             for i in dmesg_lines:
                 if re_match_1.match(i):
+                    # print("cores match!")
                     cpu_cores = re_sub_1.sub("", i)
                     cpu_cores = re_sub_2.sub("", cpu_cores)
+                    cpu_cores = re_sub_3.sub("", cpu_cores)
                     cpuinfo["cpu_cores"] = str(cpu_cores)
                     break
 
