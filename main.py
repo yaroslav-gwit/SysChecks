@@ -174,6 +174,7 @@ def login_view():
 
     cpuinfo = system_info.Cpu()
     cpu_model = cpuinfo.cpu_model
+    cpu_sockets = cpuinfo.cpu_sockets
     cpu_cores = cpuinfo.cpu_cores
     cpu_threads = cpuinfo.cpu_threads
 
@@ -199,7 +200,7 @@ def login_view():
         "\n"
         "📡 [royal_blue1]Hostname:[/] " + hostname + "  [royal_blue1] Machine IPs:[/] "  + str(ip_address_list) +
         "\n"
-        "🤖 [royal_blue1]CPU Cores:[/] " + str(cpu_cores) + " cores, " + cpu_threads + " threads  (" + cpu_model + ")" +
+        "🤖 [royal_blue1]CPU Cores:[/] " + str(cpu_sockets) + " socket(s), " + str(cpu_cores) + " core(s), " + cpu_threads + " thread(s)  (" + cpu_model + ")" +
         "\n"
         "🧠 [royal_blue1]Memory:[/] " + str(mem_used) + "(used)/" + str(mem_total) + "(total)" +
         "\n" +
