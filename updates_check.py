@@ -388,51 +388,51 @@ def final_human(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_
         if system_updates > 0 and security_updates > 0:
             if return_result:
                 space = ""
-                result = space + "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates) + "\n" + space + "[red]🔴 Including a number of security updates: [/]" + str(security_updates)
+                result = space + "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates) + "\n" + space + "[bright_red]🔴 Including a number of security updates: [/]" + str(security_updates)
                 if not cache_up_to_date:
-                    result = result + "\n\n" + space +  "[red]🔴 Your cache file is out of date!"
+                    result = result + "\n\n" + space +  "[bright_red]🔴 Your cache file is out of date!"
                 return result
             else:
                 space = " "
-                result = space + "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates) + "\n" + space + "[red]🔴 Including a number of security updates: [/]" + str(security_updates)
+                result = space + "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates) + "\n" + space + "[bright_red]🔴 Including a number of security updates: [/]" + str(security_updates)
                 if not cache_up_to_date:
-                    result = result + "\n\n" + space + "[red]🔴 Your cache file is out of date!"
+                    result = result + "\n\n" + space + "[bright_red]🔴 Your cache file is out of date!"
                 console.print(result)
 
         elif system_updates > 0:
             if return_result:
                 result = "[yellow]🟡 There is a number of system updates available: [/]" + str(system_updates)
                 if not cache_up_to_date:
-                    result = result + "\n[red]🔴 Your cache file is out of date!"
+                    result = result + "\n[bright_red]🔴 Your cache file is out of date!"
                 return result
             else:
                 result = " [yellow]🟡 There is a number of system updates available: [/]" + str(system_updates)
                 if not cache_up_to_date:
-                    result = result + "\n [red]🔴 Your cache file is out of date!"
+                    result = result + "\n [bright_red]🔴 Your cache file is out of date!"
                 console.print(result)
 
         elif security_updates > 0:
             if return_result:
-                result = "[red]🔴 There is a number of security updates available: [/]" + str(security_updates)
+                result = "[bright_red]🔴 There is a number of security updates available: [/]" + str(security_updates)
                 if not cache_up_to_date:
-                    result = result + "\n[red]🔴 Your cache file is out of date!"
+                    result = result + "\n[bright_red]🔴 Your cache file is out of date!"
                 return result
             else:
-                result = " [red]🔴 There is a number of security updates available: [/]" + str(security_updates)
+                result = " [bright_red]🔴 There is a number of security updates available: [/]" + str(security_updates)
                 if not cache_up_to_date:
-                    result = result + "\n [red]🔴 Your cache file is out of date!"
+                    result = result + "\n [bright_red]🔴 Your cache file is out of date!"
                 console.print(result)
 
         elif system_updates == 0 and security_updates == 0:
             if return_result:
                 result = "[blue]🟢 The system is up to date.[/] Well done!"
                 if not cache_up_to_date:
-                    result = result + "\n[red]🔴 Your cache file is out of date!"
+                    result = result + "\n[bright_red]🔴 Your cache file is out of date!"
                 return result
             else:
                 result = " [blue]🟢 The system is up to date.[/] Well done!"
                 if not cache_up_to_date:
-                    result = result + "\n [red]🔴 Your cache file is out of date!"
+                    result = result + "\n [bright_red]🔴 Your cache file is out of date!"
                 console.print(result)
 
 

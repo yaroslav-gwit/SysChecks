@@ -84,7 +84,7 @@ def self_update():
             for i in git_output:
                 if re_err_1.match(i):
                     console = Console(stderr=True)
-                    console.print("[red]/opt/syschecks/ is not a Git repo folder![/]\nPlease remove the folder and install [green]SysChecks[/] again.")
+                    console.print("[bright_red]/opt/syschecks/ is not a Git repo folder![/]\nPlease remove the folder and install [green]SysChecks[/] again.")
                     sys.exit(1)
 
         try:
@@ -136,7 +136,7 @@ def cron_init():
     if exists(file_location):
         Console().print("[green]The new SysChecks cron.d file was created at: [/]" + file_location)
     else:
-        Console().print("[red]Could not create a new cron.d file at: [/]" + file_location)
+        Console().print("[bright_red]Could not create a new cron.d file at: [/]" + file_location)
 
 
 @app.command()

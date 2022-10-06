@@ -101,7 +101,7 @@ def final_human(return_result:bool = False) -> None:
         else:
             console.print(" " + final_string)
     else:
-        final_string = "🔴 [red]Please reboot to apply the kernel update![/]\n        [red]Currently active kernel:[/]     " + running_kernel + "\n        [green]Latest installed kernel:[/]     " + latest_installed_kernel
+        final_string = "🔴 [bright_red]Please reboot to apply the kernel update![/]\n        [bright_red]Currently active kernel:[/]     " + running_kernel + "\n        [green]Latest installed kernel:[/]     " + latest_installed_kernel
         if return_result:
             return final_string
         else:
