@@ -20,8 +20,10 @@ class Cpu:
         re_cpu_model = re.compile(".*model name.*")
         re_cpu_model_sub = re.compile(".*model name.*:\s+")
         
-        re_cpu_cores = re.compile(".*cpu cores.*")
-        re_cpu_cores_sub = re.compile(".*cpu cores.*:\s")
+        # re_cpu_cores = re.compile(".*cpu cores.*")
+        # re_cpu_cores_sub = re.compile(".*cpu cores.*:\s")
+        re_cpu_cores = re.compile(".*processor.*")
+        re_cpu_cores_sub = re.compile(".*processor.*:\s")
 
         re_cpu_sockets = re.compile(".*physical id.*")
         re_cpu_sockets_sub = re.compile(".*physical id.*:\s")
@@ -36,10 +38,13 @@ class Cpu:
                 cpuinfo["cpu_model"] = i
             elif re_cpu_cores.match(i):
                 i = re_cpu_cores_sub.sub("", i)
-                cpuinfo["cpu_cores"] = i
+                cpuinfo["cpu_cores"] = str(int(i) + 1)
             elif re_cpu_sockets.match(i):
                 i = re_cpu_sockets_sub.sub("", i)
-                cpuinfo["cpu_sockets"] = str(int(i) + 1)
+                if int(i) != 0 and int(i) - int(cpuinfo.get("cpu_sockets", int(i)-1)) != 1:
+                    cpuinfo["cpu_sockets"] = "5"
+                else:
+                    cpuinfo["cpu_sockets"] = str(int(i) + 1)
             elif re_cpu_threads.match(i):
                 i = re_cpu_threads_sub.sub("", i)
                 cpuinfo["cpu_threads"] = i
