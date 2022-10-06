@@ -19,6 +19,8 @@ class Cpu:
 
         re_cpu_model = re.compile(".*model name.*")
         re_cpu_model_sub = re.compile(".*model name.*:\s+")
+        re_strip_whitespace_1 = re.compile("\s+")
+        re_strip_whitespace_2 = re.compile("\s@\s")
 
         re_cpu_cores = re.compile(".*cpu cores.*")
         re_cpu_cores_sub = re.compile(".*cpu cores.*:\s")
@@ -29,13 +31,12 @@ class Cpu:
         re_cpu_threads = re.compile(".*siblings.*")
         re_cpu_threads_sub = re.compile(".*siblings.*:\s")
 
-        re_strip_whitespace = re.compile("\s+")
-
         cpuinfo = {}
         for i in proc_cpuinfo:
             if re_cpu_model.match(i):
                 i = re_cpu_model_sub.sub("", i)
-                i = re_strip_whitespace.sub(" ", i)
+                i = re_strip_whitespace_1.sub(" ", i)
+                i = re_strip_whitespace_2.sub("@", i)
                 cpuinfo["cpu_model"] = i
             elif re_cpu_cores.match(i):
                 i = re_cpu_cores_sub.sub("", i)
