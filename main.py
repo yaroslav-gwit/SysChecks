@@ -193,13 +193,13 @@ def login_view():
         "\n" +
         "🔥 [green]System info[/] 🔥" +
         "\n[white]" +
-        "[blue]💻 OS installed:[/] " + prettyos +
+        "[royal_blue1]💻 OS installed:[/] " + prettyos +
         "\n"
-        "[blue]📡 Hostname:[/] " + hostname + "  [blue] Machine IPs:[/] "  + str(ip_address_list) +
+        "[royal_blue1]📡 Hostname:[/] " + hostname + "  [royal_blue1] Machine IPs:[/] "  + str(ip_address_list) +
         "\n"
-        "[blue]🤖 CPU Cores:[/] " + str(cpu_cores) + " cores, " + cpu_threads + " threads  (" + cpu_model + ")" +
+        "[royal_blue1]🤖 CPU Cores:[/] " + str(cpu_cores) + " cores, " + cpu_threads + " threads  (" + cpu_model + ")" +
         "\n"
-        "[blue]🧠 Memory:[/] " + str(mem_used) + "(used)/" + str(mem_total) + "(total)" +
+        "[royal_blue1]🧠 Memory:[/] " + str(mem_used) + "(used)/" + str(mem_total) + "(total)" +
         "\n" +
         "\n" +
         "🔥 [green]Kernel reboot status[/] 🔥" +
@@ -211,7 +211,7 @@ def login_view():
         "\n" +
         update_results +
         "[/]\n",
-        title="[green]🚀 Welcome, " + os.getenv("USER") + "![/]", style="blue", title_align="left"
+        title="[green]🚀 Welcome, " + os.getenv("USER") + "![/]", style="royal_blue1", title_align="left"
     ))
 
 

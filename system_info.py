@@ -163,8 +163,11 @@ class Users:
             temp_dict = {}
             user_item = i.split(":")
             temp_dict["username"] = user_item[0]
-            temp_dict["full_name"] = user_item[4]
-            temp_dict["home_dir"] = user_item[5] + "/"
+            temp_dict["full_name"] = user_item[4].strip(",,,")
+            if user_item[5][-1] == "/":
+                temp_dict["home_dir"] = user_item[5]
+            else:
+                temp_dict["home_dir"] = user_item[5] + "/"
             temp_dict["shell"] = user_item[6]
 
             command = "groups " + temp_dict["username"]

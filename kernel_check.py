@@ -95,7 +95,7 @@ def final_human(return_result:bool = False) -> None:
     results["list_of_installed_kernels"] = installed_kernels
 
     if running_kernel == latest_installed_kernel:
-        final_string = "🟢 [blue]You are running the latest available kernel: [/]" + running_kernel
+        final_string = "🟢 [royal_blue1]You are running the latest available kernel: [/]" + running_kernel
         if return_result:
             return final_string
         else:
