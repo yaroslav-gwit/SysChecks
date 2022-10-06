@@ -192,16 +192,16 @@ def login_view():
     
     console = Console()
     console.print(Panel.fit(
-        "\n" +
-        "[white]🔥[/] [green]System info[/] [white]🔥[/]" +
         "\n[white]" +
-        "[royal_blue1]💻 OS installed:[/] " + prettyos +
+        "🔥 [green]System info[/] 🔥" +
+        "\n" +
+        "💻 [royal_blue1]OS installed:[/] " + prettyos +
         "\n"
-        "[royal_blue1]📡 Hostname:[/] " + hostname + "  [royal_blue1] Machine IPs:[/] "  + str(ip_address_list) +
+        "📡 [royal_blue1]Hostname:[/] " + hostname + "  [royal_blue1] Machine IPs:[/] "  + str(ip_address_list) +
         "\n"
-        "[royal_blue1]🤖 CPU Cores:[/] " + str(cpu_cores) + " cores, " + cpu_threads + " threads  (" + cpu_model + ")" +
+        "🤖 [royal_blue1]CPU Cores:[/] " + str(cpu_cores) + " cores, " + cpu_threads + " threads  (" + cpu_model + ")" +
         "\n"
-        "[royal_blue1]🧠 Memory:[/] " + str(mem_used) + "(used)/" + str(mem_total) + "(total)" +
+        "🧠 [royal_blue1]Memory:[/] " + str(mem_used) + "(used)/" + str(mem_total) + "(total)" +
         "\n" +
         "\n" +
         "🔥 [green]Kernel reboot status[/] 🔥" +
