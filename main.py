@@ -60,7 +60,7 @@ def self_update():
     # Uncomment for DEV env
     # os.chdir("/root/Git/SysChecks")
 
-    with console.status("[bold blue]Working on it...[/]"):
+    with console.status("[bold royal_blue1]Working on it...[/]"):
         try:
             git_result = invoke.run("git pull", hide=True)
             if git_result.ok:

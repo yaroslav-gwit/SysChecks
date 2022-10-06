@@ -297,7 +297,7 @@ def final_json(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_u
                 json_console_output:bool = True, json_pretty = False) -> None:
 
     console = Console()
-    with console.status("[bold blue]Working on it...[/]"):
+    with console.status("[bold royal_blue1]Working on it...[/]"):
         if cache_use:
             if exists(cache_file_location):
                 with open(cache_file_location, "r") as f:
@@ -354,7 +354,7 @@ def final_human(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_
                 return_result:bool = False, no_output:bool = False) -> None:
 
     console = Console()
-    with console.status("[bold blue]Working on it...[/]"):
+    with console.status("[bold royal_blue1]Working on it...[/]"):
         if cache_use:
             if exists(cache_file_location):
                 with open(cache_file_location, "r") as f:
@@ -425,12 +425,12 @@ def final_human(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_
 
         elif system_updates == 0 and security_updates == 0:
             if return_result:
-                result = "[blue]🟢 The system is up to date.[/] Well done!"
+                result = "[royal_blue1]🟢 The system is up to date.[/] Well done!"
                 if not cache_up_to_date:
                     result = result + "\n[bright_red]🔴 Your cache file is out of date!"
                 return result
             else:
-                result = " [blue]🟢 The system is up to date.[/] Well done!"
+                result = " [royal_blue1]🟢 The system is up to date.[/] Well done!"
                 if not cache_up_to_date:
                     result = result + "\n [bright_red]🔴 Your cache file is out of date!"
                 console.print(result)
