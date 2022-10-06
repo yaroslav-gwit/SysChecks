@@ -38,7 +38,7 @@ class Cpu:
                 i = re_strip_whitespace.sub("", i)
                 cpuinfo["cpu_model"] = i
             elif re_cpu_cores.match(i):
-                i = re_cpu_cores_sub.sub("", i)
+                i = re_cpu_cores_sub.sub(" ", i)
                 cpuinfo["cpu_cores"] = i
             elif re_cpu_sockets.match(i):
                 i = re_cpu_sockets_sub.sub("", i)
