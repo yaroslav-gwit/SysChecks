@@ -25,6 +25,7 @@ class Cpu:
         re_cpu_cores = re.compile(".*processor.*")
         re_cpu_cores_sub = re.compile(".*processor.*:\s")
 
+        re_cpu_sockets_list = []
         re_cpu_sockets = re.compile(".*physical id.*")
         re_cpu_sockets_sub = re.compile(".*physical id.*:\s")
 
@@ -41,16 +42,18 @@ class Cpu:
                 cpuinfo["cpu_cores"] = str(int(i) + 1)
             elif re_cpu_sockets.match(i):
                 i = re_cpu_sockets_sub.sub("", i)
-                if (int(i) != 0) and (int(i)-int(cpuinfo.get("cpu_sockets")) != 1):
-                    cpuinfo["cpu_sockets"] = "1"
-                elif int(i) == 0:
-                    cpuinfo["cpu_sockets"] = "1"
-                elif int(i)-int(cpuinfo.get("cpu_sockets")) == 1:
-                    cpuinfo["cpu_sockets"] = str(int(i) + 1)
-
+                re_cpu_sockets_list.append(i)
+                cpuinfo["cpu_sockets"] = str(int(i) + 1)
             elif re_cpu_threads.match(i):
                 i = re_cpu_threads_sub.sub("", i)
                 cpuinfo["cpu_threads"] = i
+
+        for n, i in enumerate(re_cpu_sockets_list):
+            if int(i) == 0:
+                continue
+            elif int(i)-int(re_cpu_sockets_list[n-1]) != 1:
+                cpuinfo["cpu_sockets"] = "1 (a wild guess)"
+                break
 
         return cpuinfo
 
