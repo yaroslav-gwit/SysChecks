@@ -1,4 +1,5 @@
 from os.path import exists
+from time import sleep
 import datetime
 import json
 import sys
@@ -55,10 +56,7 @@ def self_update():
     """ Pull the latest updates from our Git repo """
 
     console = Console()
-    # Uncomment for PROD env
     os.chdir("/opt/syschecks/")
-    # Uncomment for DEV env
-    # os.chdir("/root/Git/SysChecks")
 
     with console.status("[bold royal_blue1]Working on it...[/]"):
         try:
@@ -75,6 +73,8 @@ def self_update():
                     elif not re_out_1.match(value) and (index + 1) == len(git_output):
                         console.print("[green]SysChecks was updated succesfully!")
                         cron_init()
+                        sleep(1)
+
         except invoke.exceptions.UnexpectedExit as e:
             re_err_1 = re.compile(".*not a git repository.*")
             if e.git_result.stdout:
