@@ -103,7 +103,7 @@ def self_update():
 
 
 @app.command()
-def cron_init():
+def cron_init() -> None:
     """ Initialize the required cron jobs """
     file_location = "/etc/cron.d/syschecks"
     if exists(file_location):
@@ -138,6 +138,8 @@ def cron_init():
         Console().print("[green]The new SysChecks cron.d file was created at: [/]" + file_location)
     else:
         Console().print("[bright_red]Could not create a new cron.d file at: [/]" + file_location)
+    
+    sleep(1)
 
 
 @app.command()
