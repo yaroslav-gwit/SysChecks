@@ -78,7 +78,8 @@ class Cpu:
                     cpuinfo["cpu_cores"] = str(cpu_cores)
                     break
 
-        if int(float(cpuinfo["cpu_threads"])) < int(float(cpuinfo["cpu_cores"])):
+        cpuinfo["cpu_cores"] = cpuinfo["cpu_cores"].split(".")[0]
+        if int(cpuinfo["cpu_threads"]) < int(cpuinfo["cpu_cores"]):
             cpuinfo["cpu_threads"] = cpuinfo["cpu_cores"]
 
         return cpuinfo
