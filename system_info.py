@@ -35,10 +35,10 @@ class Cpu:
         for i in proc_cpuinfo:
             if re_cpu_model.match(i):
                 i = re_cpu_model_sub.sub("", i)
-                i = re_strip_whitespace.sub("", i)
+                i = re_strip_whitespace.sub(" ", i)
                 cpuinfo["cpu_model"] = i
             elif re_cpu_cores.match(i):
-                i = re_cpu_cores_sub.sub(" ", i)
+                i = re_cpu_cores_sub.sub("", i)
                 cpuinfo["cpu_cores"] = i
             elif re_cpu_sockets.match(i):
                 i = re_cpu_sockets_sub.sub("", i)
