@@ -72,8 +72,8 @@ def self_update():
                         console.print("[green]SysChecks is already up-to-date!")
                     elif not re_out_1.match(value) and (index + 1) == len(git_output):
                         console.print("[green]SysChecks was updated succesfully!")
-                        cron_init()
                         sleep(1)
+                        cron_init()
 
         except invoke.exceptions.UnexpectedExit as e:
             re_err_1 = re.compile(".*not a git repository.*")
