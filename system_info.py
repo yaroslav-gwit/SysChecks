@@ -41,10 +41,13 @@ class Cpu:
                 cpuinfo["cpu_cores"] = str(int(i) + 1)
             elif re_cpu_sockets.match(i):
                 i = re_cpu_sockets_sub.sub("", i)
-                if int(i) != 0 and int(i) - int(cpuinfo.get("cpu_sockets")) != 1:
+                if (int(i) != 0) and (int(i)-int(cpuinfo.get("cpu_sockets")) != 1):
                     cpuinfo["cpu_sockets"] = "1"
-                else:
+                elif int(i) == 0:
+                    cpuinfo["cpu_sockets"] = "1"
+                elif int(i)-int(cpuinfo.get("cpu_sockets")) == 1:
                     cpuinfo["cpu_sockets"] = str(int(i) + 1)
+
             elif re_cpu_threads.match(i):
                 i = re_cpu_threads_sub.sub("", i)
                 cpuinfo["cpu_threads"] = i
