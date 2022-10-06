@@ -16,10 +16,10 @@ class Cpu:
     def get_cpuinfo_linux() -> dict:
         with open("/proc/cpuinfo", "r") as f:
             proc_cpuinfo = f.read().split("\n")
-        
+
         re_cpu_model = re.compile(".*model name.*")
         re_cpu_model_sub = re.compile(".*model name.*:\s+")
-        
+
         re_cpu_cores = re.compile(".*cpu cores.*")
         re_cpu_cores_sub = re.compile(".*cpu cores.*:\s")
 
@@ -77,6 +77,9 @@ class Cpu:
                     cpu_cores = re_sub_3.sub("", cpu_cores)
                     cpuinfo["cpu_cores"] = str(cpu_cores)
                     break
+
+        if int(cpuinfo["cpu_threads"]) < int(cpuinfo["cpu_cores"]):
+            cpuinfo["cpu_threads"] = cpuinfo["cpu_cores"]
 
         return cpuinfo
 

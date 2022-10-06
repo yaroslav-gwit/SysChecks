@@ -193,7 +193,7 @@ def login_view():
     console = Console()
     console.print(Panel.fit(
         "\n" +
-        "🔥 [green]System info[/] 🔥" +
+        "[white]🔥[/] [green]System info[/] [white]🔥[/]" +
         "\n[white]" +
         "[royal_blue1]💻 OS installed:[/] " + prettyos +
         "\n"
