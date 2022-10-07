@@ -88,19 +88,12 @@ def zabbix_init(
         with open(sudoers_file, "r") as f:
             sudoers_config = f.read().splitlines()
 
-        match_1 = False
-        re_match_1 = re.compile("^Cmnd_Alias\s+PERMISSIONS\s+=\s+\/bin\/syschecks")
-        re_match_2 = re.compile("^zabbix ALL=\(ALL\)\s+NOPASSWD:PERMISSIONS")
+        re_match_1 = re.compile("^zabbix ALL=\(ALL\)\s+NOPASSWD:PERMISSIONS")
         
         for n, i in enumerate(sudoers_config):
             if not re_match_1.match(i) and not (n+1) == len(sudoers_config):
                 continue
-            if not re_match_2.match(i) and not (n+1) == len(sudoers_config):
-                continue
             elif re_match_1.match(i):
-                match_1 = True
-                continue
-            elif re_match_2.match(i) and match_1:
                 Console().print("[green]Sudoers config is up-to-date[/]")
                 break
             else:
