@@ -52,6 +52,22 @@ def updates(
 
 
 @app.command()
+def fix_permissions():
+    """ Fix /opt/syschecks permissions on CIS hardened systems """
+    
+    command = "sudo find /opt/syschecks -type d -exec chmod 755 {} \;"
+    result = invoke.run(command, hide=True)
+    
+    command = "chmod go+rx /bin/syschecks"
+    result = invoke.run(command, hide=True)
+    
+    command = "chmod go+rx /opt/syschecks/venv/bin/python3"
+    result = invoke.run(command, hide=True)
+
+    Console().print("Permissions are fixed now. Please try running [green]syschecks[/] as a non-priveledged user again.")
+
+
+@app.command()
 def self_update():
     """ Pull the latest updates from our Git repo """
 
@@ -122,10 +138,10 @@ def cron_init() -> None:
     cron_jobs_list.append("\n# THIS JOB FILE WAS GENERATED ON: " + cron_job_generation_date)
     cron_jobs_list.append("MAILTO=\"\"")
 
-    cron_job_1 = "@reboot root sleep 10 && syschecks updates --cache-create --no-output"
-    cron_job_2 = "7 */12 * * * root syschecks updates --cache-create --no-output"
+    cron_job_1 = "@reboot root sleep 10 && syschecks updates --cache-create"
+    cron_job_2 = "7 */12 * * * root syschecks updates --cache-create"
     cron_job_3 = "17 9 */3 * * root syschecks self-update"
-    
+
     cron_jobs_list.append(cron_job_1)
     cron_jobs_list.append(cron_job_2)
     cron_jobs_list.append(cron_job_3)

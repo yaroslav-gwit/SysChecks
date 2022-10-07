@@ -339,6 +339,7 @@ def final_json(dummy_data:bool = False, cache_file_location:str = "/tmp/syschk_u
                 os.remove(cache_file_location)
             with open(cache_file_location, "w") as f:
                 f.write(json_output_no_format)
+            os.chmod(cache_file_location, 0o644)
 
         if json_console_output:
             if json_pretty:
