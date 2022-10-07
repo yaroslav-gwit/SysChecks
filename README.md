@@ -37,6 +37,21 @@ Remove the installation script after you are done:
 rm -f /root/syschecks_install.sh
 ```
 
+Having permission issues?
+```
+syschecks fix-permissions
+```
+
+Want to use our Zabbix integration template?
+```
+syschecks zabbix-init
+```
+
+Need offline docs? Just run:
+```
+syschecks --help
+```
+
 # Roadmap
 - fwupd intergration to inform the enduser/admin about the firmware updates
 - disk space checks to show up at the login sreen if there are disks with less than 10% free space

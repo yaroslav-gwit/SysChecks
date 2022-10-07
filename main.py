@@ -52,8 +52,14 @@ def updates(
 
 
 @app.command()
-def zabbix_init():
+def zabbix_init(
+        remove_integration:bool = typer.Option(False, help="Remove Zabbix integration and clean up the config files"),
+    ):
     """ Apply Zabbix integration support """
+
+    if remove_integration:
+        Console(stderr=True).print("[red]Sorry this feature is not ready yet[/]")
+        sys.exit(1)
 
     zabbix_agent_file = "/etc/zabbix/zabbix_agentd.conf"
     sudoers_file = "/etc/sudoers"
@@ -61,7 +67,7 @@ def zabbix_init():
     if exists(zabbix_agent_file):
         with open(zabbix_agent_file, "r") as f:
             zabbix_config = f.read().splitlines()
-        re_match_1 = re.compile("^UserParameter=syschecks\[\*\],sudo syschecks \$1$")
+        re_match_1 = re.compile("^UserParameter=syschecks\[\*\],sudo\s+syschecks\s+\$1")
         for n, i in enumerate(zabbix_config):
             if not re_match_1.match(i) and not (n+1) == len(zabbix_config):
                 continue
@@ -81,14 +87,20 @@ def zabbix_init():
     if exists(sudoers_file):
         with open(sudoers_file, "r") as f:
             sudoers_config = f.read().splitlines()
-        re_match_1 = re.compile("^Cmnd_Alias PERMISSIONS = \/bin\/syschecks")
-        re_match_2 = re.compile("^zabbix ALL=\(ALL\) NOPASSWD:PERMISSIONS$")
+
+        match_1 = False
+        re_match_1 = re.compile("^Cmnd_Alias\s+PERMISSIONS\s+=\s+\/bin\/syschecks")
+        re_match_2 = re.compile("^zabbix ALL=\(ALL\)\s+NOPASSWD:PERMISSIONS")
+        
         for n, i in enumerate(sudoers_config):
             if not re_match_1.match(i) and not (n+1) == len(sudoers_config):
                 continue
             if not re_match_2.match(i) and not (n+1) == len(sudoers_config):
                 continue
-            elif re_match_1.match(i) and re_match_2.match(i):
+            elif re_match_1.match(i):
+                match_1 = True
+                continue
+            elif re_match_2.match(i) and match_1:
                 Console().print("[green]Sudoers config is up-to-date[/]")
                 break
             else:
