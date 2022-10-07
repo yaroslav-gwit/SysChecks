@@ -54,13 +54,14 @@ def updates(
 @app.command()
 def fix_permissions():
     """ Fix /opt/syschecks permissions on CIS hardened systems """
-    
+
     command = "sudo find /opt/syschecks -type d -exec chmod 755 {} \;"
     result = invoke.run(command, hide=True)
-    
+    command = "sudo find /opt/syschecks -type f -exec chmod go+r {} \;"
+    result = invoke.run(command, hide=True)
+
     command = "chmod go+rx /bin/syschecks"
     result = invoke.run(command, hide=True)
-    
     command = "chmod go+rx /opt/syschecks/venv/bin/python3"
     result = invoke.run(command, hide=True)
 
