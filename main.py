@@ -71,8 +71,8 @@ def zabbix_init():
             else:
                 with open(zabbix_agent_file, "a") as f:
                     f.write("")
-                    f.write("#_ SYSCHECKS INTEGRATION _#")
-                    f.write("UserParameter=syschecks[*],sudo syschecks $1")
+                    f.write("\n#_ SYSCHECKS INTEGRATION _#")
+                    f.write("\nUserParameter=syschecks[*],sudo syschecks $1")
                     f.write("")
     else:
         Console(stderr=True).print("[red]Zabbix agent file doesn't exist here: " + zabbix_agent_file + "[/]")
@@ -94,9 +94,9 @@ def zabbix_init():
             else:
                 with open(sudoers_file, "a") as f:
                     f.write("")
-                    f.write("#_ SYSCHECKS INTEGRATION _#")
-                    f.write("Cmnd_Alias PERMISSIONS = /bin/syschecks")
-                    f.write("zabbix ALL=(ALL) NOPASSWD:PERMISSIONS")
+                    f.write("\n#_ SYSCHECKS INTEGRATION _#")
+                    f.write("\nCmnd_Alias PERMISSIONS = /bin/syschecks")
+                    f.write("\nzabbix ALL=(ALL) NOPASSWD:PERMISSIONS")
                     f.write("")
     else:
         Console(stderr=True).print("[red]Sudoers file doesn't exist here: " + sudoers_file + "[/]")
