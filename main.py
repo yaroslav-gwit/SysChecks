@@ -52,6 +52,63 @@ def updates(
 
 
 @app.command()
+def zabbix_init():
+    """ Apply Zabbix integration support """
+
+    zabbix_agent_file = "/etc/zabbix/zabbix_agentd.conf"
+    sudoers_file = "/etc/sudoers"
+
+    if exists(zabbix_agent_file):
+        with open(zabbix_agent_file, "r") as f:
+            zabbix_config = f.read().splitlines()
+        re_match_1 = re.compile("^UserParameter=syschecks\[\*\],sudo syschecks \$1$")
+        for n, i in enumerate(zabbix_config):
+            if not re_match_1.match(i) and not (n+1) == len(zabbix_config):
+                continue
+            elif re_match_1.match(i):
+                Console().print("[green]Zabbix config is up-to-date[/]")
+                break
+            else:
+                with open(zabbix_agent_file, "a") as f:
+                    f.write("")
+                    f.write("#_ SYSCHECKS INTEGRATION _#")
+                    f.write("UserParameter=syschecks[*],sudo syschecks $1")
+                    f.write("")
+    else:
+        Console(stderr=True).print("[red]Zabbix agent file doesn't exist here: " + zabbix_agent_file + "[/]")
+        sys.exit(1)
+
+    if exists(sudoers_file):
+        with open(sudoers_file, "r") as f:
+            sudoers_config = f.read().splitlines()
+        re_match_1 = re.compile("^Cmnd_Alias PERMISSIONS = \/bin\/syschecks")
+        re_match_2 = re.compile("^zabbix ALL=\(ALL\) NOPASSWD:PERMISSIONS$")
+        for n, i in enumerate(sudoers_config):
+            if not re_match_1.match(i) and not (n+1) == len(sudoers_config):
+                continue
+            if not re_match_2.match(i) and not (n+1) == len(sudoers_config):
+                continue
+            elif re_match_1.match(i) and re_match_2.match(i):
+                Console().print("[green]Sudoers config is up-to-date[/]")
+                break
+            else:
+                with open(sudoers_file, "a") as f:
+                    f.write("")
+                    f.write("#_ SYSCHECKS INTEGRATION _#")
+                    f.write("Cmnd_Alias PERMISSIONS = /bin/syschecks")
+                    f.write("zabbix ALL=(ALL) NOPASSWD:PERMISSIONS")
+                    f.write("")
+    else:
+        Console(stderr=True).print("[red]Sudoers file doesn't exist here: " + sudoers_file + "[/]")
+        sys.exit(1)
+
+    command = "sudo systemctl restart zabbix-agent"
+    result = invoke.run(command, hide=True)
+
+    Console().print("[green]Zabbix integration has been activated[/]")
+
+
+@app.command()
 def fix_permissions():
     """ Fix /opt/syschecks permissions on CIS hardened systems """
     
