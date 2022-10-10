@@ -98,11 +98,12 @@ def zabbix_init(
                 break
             else:
                 with open(sudoers_file, "a") as f:
-                    f.write("")
+                    f.write("\n")
                     f.write("\n#_ SYSCHECKS INTEGRATION _#")
+                    f.write("\nDefaults:zabbix !requiretty")
                     f.write("\nCmnd_Alias PERMISSIONS = /bin/syschecks")
                     f.write("\nzabbix ALL=(ALL) NOPASSWD:PERMISSIONS")
-                    f.write("")
+                    f.write("\n")
     else:
         Console(stderr=True).print("[red]Sudoers file doesn't exist here: " + sudoers_file + "[/]")
         sys.exit(1)
