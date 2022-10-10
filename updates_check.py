@@ -240,6 +240,7 @@ def yum_check(dummy_data:bool = True) -> dict:
     re_continue_4 = re.compile(r"This system is not registered")
     re_continue_5 = re.compile("\s:\sversionlock")
     re_continue_6 = re.compile(r"Last metadata expiration check")
+    re_continue_7 = re.compile(".*\s:\ssubscription-manager.*")
 
     for i in all_updates_input:
         i = re_w_repl.sub(" ", i)
@@ -264,6 +265,8 @@ def yum_check(dummy_data:bool = True) -> dict:
         if re_continue_1.match(i) or re_continue_2.match(i) or re_continue_3.match(i):
             continue
         elif re_continue_4.match(i) or re_continue_5.match(i) or re_continue_6.match(i):
+            continue
+        elif re_continue_7.match(i):
             continue
         elif re_obslt.match(i):
             break
