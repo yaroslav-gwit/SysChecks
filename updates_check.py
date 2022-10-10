@@ -238,7 +238,7 @@ def yum_check(dummy_data:bool = True) -> dict:
     re_continue_2 = re.compile(r"updateinfo list done")
     re_continue_3 = re.compile(r": manager,")
     re_continue_4 = re.compile(r"This system is not registered")
-    re_continue_5 = re.compile(r"versionlock")
+    re_continue_5 = re.compile("\s:\sversionlock")
     re_continue_6 = re.compile(r"Last metadata expiration check")
 
     for i in all_updates_input:
