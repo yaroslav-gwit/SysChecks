@@ -81,8 +81,10 @@ def dnf_check(dummy_data:bool = False) -> dict:
         run(command, hide=True)
 
         command = "dnf --cacheonly check-update"
-        result = run(command, hide=True)
-        if result.ok:
+        try:
+            result = run(command, hide=True)
+            all_updates_input = result.stdout.splitlines()
+        except invoke.exceptions.UnexpectedExit as e:
             all_updates_input = result.stdout.splitlines()
 
         command = "dnf --cacheonly updateinfo list updates security"
