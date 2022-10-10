@@ -253,6 +253,8 @@ def yum_check(dummy_data:bool = True) -> dict:
             continue
         elif re_continue_4.match(i) or re_continue_5.match(i) or re_continue_6.match(i):
             continue
+        elif re_continue_7.match(i):
+            continue
         elif re_obslt.match(i):
             break
         elif i:
