@@ -69,7 +69,7 @@ class Cpu:
             re_sub_1 = re.compile(".* node[s,]|,\s")
             re_sub_2 = re.compile(" CPU.*")
             re_sub_3 = re.compile("\s")
-            command = "dmesg | grep -i cpu"
+            command = "cat /var/log/dmesg | grep -i cpu"
             result = invoke.run(command, hide=True)
             dmesg_lines = result.stdout.splitlines()
             for i in dmesg_lines:
