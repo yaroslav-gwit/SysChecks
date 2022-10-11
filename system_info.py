@@ -27,7 +27,7 @@ class Cpu:
         re_cpu_cores_sub = re.compile(".*Core(s) per socket:.*\s+")
 
         re_cpu_sockets = re.compile(".*Socket(s):.*")
-        re_cpu_sockets_sub = re.compile(".*Socket(s):.*\s+")
+        re_cpu_sockets_sub = re.compile(".*Socket(s):\s+")
 
         re_cpu_threads = re.compile(".*Thread(s) per core:.*")
         re_cpu_threads_sub = re.compile(".*Thread(s) per core:.*\s+")
@@ -40,12 +40,15 @@ class Cpu:
                 i = re_strip_whitespace_2.sub("@", i)
                 cpuinfo["cpu_model"] = i
             elif re_cpu_cores.match(i):
+                print(i)
                 i = re_cpu_cores_sub.sub("", i)
                 cpuinfo["cpu_cores"] = i
             elif re_cpu_sockets.match(i):
+                print(i)
                 i = re_cpu_sockets_sub.sub("", i)
                 cpuinfo["cpu_sockets"] = i
             elif re_cpu_threads.match(i):
+                print(i)
                 i = re_cpu_threads_sub.sub("", i)
                 cpuinfo["cpu_threads"] = i
 
