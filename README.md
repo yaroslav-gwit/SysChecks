@@ -37,7 +37,7 @@ Remove the installation script after you are done:
 rm -f /root/syschecks_install.sh
 ```
 
-Having permission issues?
+Having permission issues (normally this only happens on the CIS hardened systems)?
 ```
 syschecks fix-permissions
 ```
