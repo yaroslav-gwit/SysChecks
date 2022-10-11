@@ -23,14 +23,14 @@ class Cpu:
         re_strip_whitespace_1 = re.compile("\s+")
         re_strip_whitespace_2 = re.compile("\s@\s")
 
-        re_cpu_cores = re.compile(".*Core(s) per socket:.*")
-        re_cpu_cores_sub = re.compile(".*Core(s) per socket:.*\s+")
+        re_cpu_cores = re.compile(".*Core\(s\) per socket.*")
+        re_cpu_cores_sub = re.compile(".*Core\(s\) per socket.*\s+")
 
-        re_cpu_sockets = re.compile(".*Socket(s):.*")
-        re_cpu_sockets_sub = re.compile(".*Socket(s):\s+")
+        re_cpu_sockets = re.compile(".*Socket\(s\).*")
+        re_cpu_sockets_sub = re.compile(".*Socket\(s\).*\s+")
 
-        re_cpu_threads = re.compile(".*Thread(s) per core:.*")
-        re_cpu_threads_sub = re.compile(".*Thread(s) per core:.*\s+")
+        re_cpu_threads = re.compile(".*Thread\(s\) per core.*")
+        re_cpu_threads_sub = re.compile(".*Thread\(s\) per core.*\s+")
 
         cpuinfo = {}
         for i in lscpu_lines:
