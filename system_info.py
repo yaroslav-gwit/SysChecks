@@ -14,25 +14,26 @@ class Cpu:
 
     @staticmethod
     def get_cpuinfo_linux() -> dict:
-        with open("/proc/cpuinfo", "r") as f:
-            proc_cpuinfo = f.read().split("\n")
+        command = "lscpu"
+        result = invoke.run(command, hide=True)
+        lscpu_lines = result.stdout.splitlines()
 
-        re_cpu_model = re.compile(".*model name.*")
-        re_cpu_model_sub = re.compile(".*model name.*:\s+")
+        re_cpu_model = re.compile(".*Model name:.*")
+        re_cpu_model_sub = re.compile(".*Model name:.*:\s+")
         re_strip_whitespace_1 = re.compile("\s+")
         re_strip_whitespace_2 = re.compile("\s@\s")
 
-        re_cpu_cores = re.compile(".*cpu cores.*")
-        re_cpu_cores_sub = re.compile(".*cpu cores.*:\s")
+        re_cpu_cores = re.compile(".*Core(s) per socket:.*")
+        re_cpu_cores_sub = re.compile(".*Core(s) per socket:.*\s+")
 
-        re_cpu_sockets = re.compile(".*physical id.*")
-        re_cpu_sockets_sub = re.compile(".*physical id.*:\s")
+        re_cpu_sockets = re.compile(".*Socket(s):.*")
+        re_cpu_sockets_sub = re.compile(".*Socket(s):.*\s+")
 
-        re_cpu_threads = re.compile(".*siblings.*")
-        re_cpu_threads_sub = re.compile(".*siblings.*:\s")
+        re_cpu_threads = re.compile(".*Thread(s) per core:.*")
+        re_cpu_threads_sub = re.compile(".*Thread(s) per core:.*\s+")
 
         cpuinfo = {}
-        for i in proc_cpuinfo:
+        for i in lscpu_lines:
             if re_cpu_model.match(i):
                 i = re_cpu_model_sub.sub("", i)
                 i = re_strip_whitespace_1.sub(" ", i)
@@ -47,47 +48,6 @@ class Cpu:
             elif re_cpu_threads.match(i):
                 i = re_cpu_threads_sub.sub("", i)
                 cpuinfo["cpu_threads"] = i
-
-        cpu_sockets_alt = False
-        if int(cpuinfo["cpu_sockets"]) > 2:
-            re_match_1 = re.compile(".*smp: Brought up.*")
-            re_sub_1 = re.compile(".*smp: Brought up ")
-            re_sub_2 = re.compile(" node[s,].*|,.*")
-            command = "dmesg | grep -i cpu"
-            result = invoke.run(command, hide=True)
-            dmesg_lines = result.stdout.splitlines()
-            for i in dmesg_lines:
-                if re_match_1.match(i):
-                    cpu_sockets = re_sub_1.sub("", i)
-                    cpu_sockets = re_sub_2.sub("", cpu_sockets)
-                    cpuinfo["cpu_sockets"] = str(cpu_sockets)
-                    cpu_sockets_alt = True
-                    break
-
-        if int(cpuinfo["cpu_cores"]) < 2:
-            re_match_1 = re.compile(".*smp: Brought up.*")
-            re_sub_1 = re.compile(".* node[s,]|,\s")
-            re_sub_2 = re.compile(" CPU.*")
-            re_sub_3 = re.compile("\s")
-            if os.path.exists("/var/log/dmesg"):
-                command = "cat /var/log/dmesg | grep -i cpu"
-            else:
-                command = "dmesg | grep -i cpu"
-            result = invoke.run(command, hide=True)
-            dmesg_lines = result.stdout.splitlines()
-            for i in dmesg_lines:
-                if re_match_1.match(i):
-                    cpu_cores = re_sub_1.sub("", i)
-                    cpu_cores = re_sub_2.sub("", cpu_cores)
-                    cpu_cores = re_sub_3.sub("", cpu_cores)
-                    if cpu_sockets_alt:
-                        cpu_cores = int(cpu_cores) / int(cpuinfo["cpu_sockets"])
-                    cpuinfo["cpu_cores"] = str(cpu_cores)
-                    break
-
-        cpuinfo["cpu_cores"] = cpuinfo["cpu_cores"].split(".")[0]
-        if int(cpuinfo["cpu_threads"]) < int(cpuinfo["cpu_cores"]):
-            cpuinfo["cpu_threads"] = cpuinfo["cpu_cores"]
 
         return cpuinfo
 
