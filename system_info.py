@@ -40,18 +40,16 @@ class Cpu:
                 i = re_strip_whitespace_2.sub("@", i)
                 cpuinfo["cpu_model"] = i
             elif re_cpu_cores.match(i):
-                print(i)
                 i = re_cpu_cores_sub.sub("", i)
                 cpuinfo["cpu_cores"] = i
             elif re_cpu_sockets.match(i):
-                print(i)
                 i = re_cpu_sockets_sub.sub("", i)
                 cpuinfo["cpu_sockets"] = i
             elif re_cpu_threads.match(i):
-                print(i)
                 i = re_cpu_threads_sub.sub("", i)
                 cpuinfo["cpu_threads"] = i
 
+        cpuinfo["cpu_threads"] = str(int(cpuinfo["cpu_threads"]) * int(cpuinfo["cpu_cores"]))
         return cpuinfo
 
 
