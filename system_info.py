@@ -44,7 +44,7 @@ class Cpu:
                 cpuinfo["cpu_cores"] = i
             elif re_cpu_sockets.match(i):
                 i = re_cpu_sockets_sub.sub("", i)
-                cpuinfo["cpu_sockets"] = str(int(i) + 1)
+                cpuinfo["cpu_sockets"] = i
             elif re_cpu_threads.match(i):
                 i = re_cpu_threads_sub.sub("", i)
                 cpuinfo["cpu_threads"] = i
