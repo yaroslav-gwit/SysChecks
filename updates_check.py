@@ -33,7 +33,7 @@ def detect_os() -> str:
         os_type = "deb"
     elif os_type == "centos":
         os_type = "yum"
-    elif os_type == "almalinux":
+    elif os_type == "almalinux" or os_type == "ol":
         os_type = "dnf"
     else:
         os_type = "unsupported"

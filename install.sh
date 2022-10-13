@@ -12,7 +12,7 @@ elif [[ $(grep "ID=" /etc/os-release | grep -c "centos") > 0 ]]; then
     yum makecache fast
     yum -y install python3-pip git
     python3 -m pip install virtualenv
-elif [[ $(grep "ID=" /etc/os-release | grep -c "almalinux") > 0 ]]; then
+elif [[ $(grep "ID=" /etc/os-release | grep -c "almalinux\|ol") > 0 ]]; then
     dnf makecache
     dnf -y install python3-pip git
     python3 -m pip install virtualenv
