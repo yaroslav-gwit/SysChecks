@@ -205,7 +205,7 @@ def cron_init() -> None:
 
     cron_job_1 = "@reboot root sleep 10 && syschecks updates --cache-create"
     cron_job_2 = "7 */12 * * * root syschecks updates --cache-create"
-    cron_job_3 = "17 9 */3 * * root syschecks self-update && syschecks fix-permissions"
+    cron_job_3 = "17 9 * * */3 root syschecks self-update && syschecks fix-permissions"
 
     cron_jobs_list.append(cron_job_1)
     cron_jobs_list.append(cron_job_2)
