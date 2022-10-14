@@ -161,7 +161,10 @@ def deb_check(dummy_data:bool = False) -> dict:
             all_updates_input = f.read().split("\n")
     else:
         command = "apt-get update"
-        run(command, hide=True)
+        try:
+            result = run(command, hide=True)
+        except invoke.exceptions.UnexpectedExit as e:
+            pass
 
         command = "apt-get dist-upgrade -s"
         result = run(command, hide=True)
