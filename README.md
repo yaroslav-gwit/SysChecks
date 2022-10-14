@@ -53,6 +53,7 @@ syschecks --help
 ```
 
 # Roadmap
+- refresh all screenshots to reflect the latest changes
 - display system uptime on the login banner
 - fwupd intergration to inform the enduser/admin about the firmware updates
 - disk space checks to show up at the login sreen if there are disks with less than 10% free space
