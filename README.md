@@ -4,6 +4,7 @@ SysChecks up to this date include: Login View, Kernel reboot check, and System U
 
 The list of supported OSes:
 - AlmaLinux 8
+- Oracle Linux 8
 - CentOS 7
 - Ubuntu (any non-EOL ubuntu release)
 - Debian (any non-EOL debian release)
