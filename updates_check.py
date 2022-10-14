@@ -108,7 +108,12 @@ def dnf_check(dummy_data:bool = False) -> dict:
         elif re_obslt.match(i):
             break
         elif i:
-            all_updates.append(i)
+            i_list = i.split()
+            if len(i_list) > 0:
+                if i_list[0][-4:] == ".src":
+                    continue
+                else:
+                    all_updates.append(i)
 
     for i in security_updates_input:
         i = re_replace_1.sub(" ", i)
