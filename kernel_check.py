@@ -85,13 +85,17 @@ def final_human(return_result:bool = False) -> None:
 
     running_kernel = get_running_kernel()
     installed_kernels = get_installed_kernels()
+    installed_kernels_oem = []
     
     re_oem = re.compile(".*-oem.*")
     if re_oem.match(running_kernel):
         for i in installed_kernels:
-            if not re_oem.match(i):
-                installed_kernels.remove(i)
-    latest_installed_kernel = installed_kernels[-1]
+            if re_oem.match(i):
+                installed_kernels_oem.append(i)
+        installed_kernels_oem = natsorted(installed_kernels_oem)
+        latest_installed_kernel = installed_kernels_oem[-1]
+    else:
+        latest_installed_kernel = installed_kernels[-1]
 
     results = {}
     results["running_kernel"] = running_kernel
