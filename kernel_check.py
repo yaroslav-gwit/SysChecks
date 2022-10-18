@@ -49,13 +49,17 @@ def final_json(save_file:bool = False, file_location:str = "/tmp/syschk_kern.jso
 
     running_kernel = get_running_kernel()
     installed_kernels = get_installed_kernels()
+    installed_kernels_oem = []
     
     re_oem = re.compile(".*-oem.*")
     if re_oem.match(running_kernel):
         for i in installed_kernels:
-            if not re_oem.match(i):
-                installed_kernels.remove(i)
-    latest_installed_kernel = installed_kernels[-1]
+            if re_oem.match(i):
+                installed_kernels_oem.append(i)
+        installed_kernels_oem = natsorted(installed_kernels_oem)
+        latest_installed_kernel = installed_kernels_oem[-1]
+    else:
+        latest_installed_kernel = installed_kernels[-1]
 
     reboot_required = False
     if running_kernel != latest_installed_kernel:
