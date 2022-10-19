@@ -16,49 +16,49 @@ if [[ $(grep "ID=" /etc/os-release | grep -c "ubuntu\|debian") > 0 ]]; then
     apt-mark hold docker*
     apt-mark hold containerd*
 
-    echo "" >> ${LOG_FILE} && echo "" >> ${LOG_FILE}
+    if [[ -f ${LOG_FILE} ]]; then echo "" >> ${LOG_FILE} && echo "" >> ${LOG_FILE}; fi
     echo "#_ $(date) _#" >> ${LOG_FILE}
 
-    apt-get update 2>&1 >> ${LOG_FILE}
-    apt-get --yes upgrade -o Dir::Etc::SourceList=/etc/apt/security.sources.list -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" 2>&1 >> ${LOG_FILE}
+    apt-get update 2>&1 | tee -a ${LOG_FILE}
+    apt-get --yes upgrade -o Dir::Etc::SourceList=/etc/apt/security.sources.list -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" 2>&1 | tee -a ${LOG_FILE}
 
     # DOCKER UPDATES ARE ENABLED AGAIN AT THE END OF THE PROCESS
     apt-mark unhold docker*
     apt-mark unhold containerd*
 
 elif [[ $(grep "ID=" /etc/os-release | grep -c "centos") > 0 ]]; then
-    yum install -y yum-plugin-versionlock 2>&1 /dev/null
+    yum install -y yum-plugin-versionlock
 
-    echo "" >> ${LOG_FILE} && echo "" >> ${LOG_FILE}
+    if [[ -f ${LOG_FILE} ]]; then echo "" >> ${LOG_FILE} && echo "" >> ${LOG_FILE}; fi
     echo "#_ $(date) _#" >> ${LOG_FILE}
 
     # DOCKER UPDATES ARE LOCKED TO AVOID CONTAINER FAILURES
-    yum versionlock docker* 2>&1 >> ${LOG_FILE}
-    yum versionlock containerd* 2>&1 >> ${LOG_FILE}
+    yum versionlock docker* 2>&1 | tee -a ${LOG_FILE}
+    yum versionlock containerd* 2>&1 | tee -a ${LOG_FILE}
 
-    yum updateinfo info security 2>&1 >> ${LOG_FILE}
-    yum -y update --security 2>&1 >> ${LOG_FILE}
+    yum updateinfo info security 2>&1 | tee -a ${LOG_FILE}
+    yum -y update --security 2>&1 | tee -a ${LOG_FILE}
 
     # DOCKER UPDATES ARE ENABLED AGAIN AT THE END OF THE PROCESS
-    yum versionlock delete docker* 2>&1 >> ${LOG_FILE}
-    yum versionlock delete containerd* 2>&1 >> ${LOG_FILE}
+    yum versionlock delete docker* 2>&1 | tee -a ${LOG_FILE}
+    yum versionlock delete containerd* 2>&1 | tee -a ${LOG_FILE}
 
 elif [[ $(grep "ID=" /etc/os-release | grep -c 'almalinux\|\"ol\"') > 0 ]]; then
-    dnf install -y python3-dnf-plugin-versionlock 2>&1 /dev/null
+    dnf install -y python3-dnf-plugin-versionlock
 
-    echo "" >> ${LOG_FILE} && echo "" >> ${LOG_FILE}
+    if [[ -f ${LOG_FILE} ]]; then echo "" >> ${LOG_FILE} && echo "" >> ${LOG_FILE}; fi
     echo "#_ $(date) _#" >> ${LOG_FILE}
 
     # DOCKER UPDATES ARE LOCKED TO AVOID CONTAINER FAILURES
-    dnf versionlock docker* 2>&1 >> ${LOG_FILE}
-    dnf versionlock containerd* 2>&1 >> ${LOG_FILE}
+    dnf versionlock docker* 2>&1 | tee -a ${LOG_FILE}
+    dnf versionlock containerd* 2>&1 | tee -a ${LOG_FILE}
 
-    dnf updateinfo info security 2>&1 >> ${LOG_FILE}
-    dnf -y update --security 2>&1 >> ${LOG_FILE}
+    dnf updateinfo info security 2>&1 | tee -a ${LOG_FILE}
+    dnf -y update --security 2>&1 | tee -a ${LOG_FILE}
 
     # DOCKER UPDATES ARE ENABLED AGAIN AT THE END OF THE PROCESS
-    dnf versionlock delete docker* 2>&1 >> ${LOG_FILE}
-    dnf versionlock delete containerd* 2>&1 >> ${LOG_FILE}
+    dnf versionlock delete docker* 2>&1 | tee -a ${LOG_FILE}
+    dnf versionlock delete containerd* 2>&1 | tee -a ${LOG_FILE}
 
 else
     echo "Sorry your OS is not yet supported!" && exit 1
