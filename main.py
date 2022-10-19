@@ -255,7 +255,7 @@ def automatic_updates(
     if exists(automatic_security_updates_cron_file):
         os.remove(automatic_security_updates_cron_file)
 
-    if disable_auto_updates:
+    if disable:
         Console().print("Automatic updates are [green]now disabled![/]")
         sys.exit(0)
 
