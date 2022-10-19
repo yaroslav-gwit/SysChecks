@@ -286,6 +286,8 @@ def automatic_updates(
             command = "chmod +x " + automatic_system_updates_sh
             result = invoke.run(command, hide=True)
             Console().print("[green]The new cron.d file was created at: [/]" + automatic_system_updates_cron_file)
+            Console().print("[green]This shell script will be used to apply system updates: [/]" + automatic_system_updates_sh)
+            Console().print("[green]Log file would be located here:[/] /var/log/automatic_system_updates.log")
 
     elif enable_security:
         cron_jobs_list.append(cron_job_security_updates)
@@ -298,6 +300,8 @@ def automatic_updates(
             command = "chmod +x " + automatic_security_updates_sh
             result = invoke.run(command, hide=True)
             Console().print("[green]The new cron.d file was created at: [/]" + automatic_security_updates_cron_file)
+            Console().print("[green]This shell script will be used to apply security updates: [/]" + automatic_security_updates_sh)
+            Console().print("[green]Log file would be located here:[/] /var/log/automatic_security_updates.log")
 
     else:
         Console().print("[bright_red]Please choose one of the options [green]--enable-system --enable-security --disable-auto-updates[/] ![/]")
