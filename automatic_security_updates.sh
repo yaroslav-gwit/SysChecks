@@ -67,3 +67,4 @@ else
 fi
 
 syschecks updates --cache-create
+syschecks
