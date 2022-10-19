@@ -238,7 +238,7 @@ def userinfo(json_pretty:bool = typer.Option(False, help="Pretty JSON output"),
 def automatic_updates(
         enable_system:bool = typer.Option(False, help="Enable automatic system updates (using cron)"),
         enable_security:bool = typer.Option(False, help="Enable automatic security updates (using cron)"),
-        disable_auto_updates:bool = typer.Option(False, help="Disable automatic system updates"),
+        disable:bool = typer.Option(False, help="Disable automatic system updates"),
     ):
 
     """ Enable or disable automatic `system` or `security only` updates """
@@ -256,7 +256,7 @@ def automatic_updates(
         os.remove(automatic_security_updates_cron_file)
 
     if disable_auto_updates:
-        Console().print("Automatic updates are not disabled!")
+        Console().print("Automatic updates are [green]now disabled![/]")
         sys.exit(0)
 
     cron_jobs_list = []
