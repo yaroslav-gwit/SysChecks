@@ -30,5 +30,8 @@ elif [[ $(grep "ID=" /etc/os-release | grep -c 'almalinux\|\"ol\"') > 0 ]]; then
 
 else
     echo "Sorry your OS is not yet supported!" && exit 1
+    exit 1
 
 fi
+
+syschecks updates --cache-create
