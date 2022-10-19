@@ -48,7 +48,22 @@ Want to use our Zabbix integration template?
 syschecks zabbix-init
 ```
 
-Need offline docs? Just run:
+# Activate automatic system and security updates
+There are 2 scripts responsible for system and security updates (and they can't be used together, my script makes them mutually excusive). The `system_update` script will run the equivalent of `dist-upgrade` on your system, and `security_update` will only apply the updates that are marked as a security update by the linux distro vendor (excluding docker updates, because they may break running containers). To activate the automatic system or security updates run one of the commands below:
+```
+# Activate system updates
+syschecks automatic-updates --enable-system
+# Activate security updates
+syschecks automatic-updates --enable-security
+```
+
+In case you'd like to disable the updates:
+```
+syschecks automatic-updates --disable
+```
+
+
+# Offline docs
 ```
 syschecks --help
 ```
