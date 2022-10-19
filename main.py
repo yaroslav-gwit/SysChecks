@@ -246,6 +246,10 @@ def automatic_updates(
     automatic_system_updates_cron_file = "/etc/cron.d/automatic_system_updates"
     automatic_security_updates_cron_file = "/etc/cron.d/automatic_security_updates"
 
+    automatic_system_updates_sh = "/opt/syschecks/automatic_system_updates.sh"
+    automatic_security_updates_sh = "/opt/syschecks/automatic_security_updates.sh"
+
+
     if exists(automatic_system_updates_cron_file):
         os.remove(automatic_system_updates_cron_file)
     if exists(automatic_security_updates_cron_file):
@@ -268,8 +272,8 @@ def automatic_updates(
     cron_jobs_list.append("\n# THIS JOB FILE WAS GENERATED ON: " + cron_job_generation_date)
     cron_jobs_list.append("MAILTO=\"\"")
 
-    cron_job_system_updates = "5 4 * * * root /opt/automatic_system_updates.sh"
-    cron_job_security_updates = "5 4 * * * root /opt/automatic_security_updates.sh"
+    cron_job_system_updates = "5 4 * * * root " + automatic_system_updates_sh
+    cron_job_security_updates = "5 4 * * * root " + automatic_security_updates_sh
 
     if enable_system:
         cron_jobs_list.append(cron_job_system_updates)
@@ -279,7 +283,7 @@ def automatic_updates(
             f.write(final_result)
 
         if exists(automatic_system_updates_cron_file):
-            command = "chmod +x /opt/automatic_system_updates.sh"
+            command = "chmod +x " + automatic_system_updates_sh
             result = invoke.run(command, hide=True)
             Console().print("[green]The new cron.d file was created at: [/]" + automatic_system_updates_cron_file)
 
@@ -291,12 +295,12 @@ def automatic_updates(
             f.write(final_result)
 
         if exists(automatic_security_updates_cron_file):
-            command = "chmod +x /opt/automatic_security_updates.sh"
+            command = "chmod +x " + automatic_security_updates_sh
             result = invoke.run(command, hide=True)
             Console().print("[green]The new cron.d file was created at: [/]" + automatic_security_updates_cron_file)
 
     else:
-        Console().print("[red]Please choose one of the options [green]--enable-system --enable-security --disable-auto-updates[/] ![/]")
+        Console().print("[bright_red]Please choose one of the options [green]--enable-system --enable-security --disable-auto-updates[/] ![/]")
 
 
 @app.command()
