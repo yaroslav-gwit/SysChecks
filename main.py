@@ -140,6 +140,9 @@ def self_update():
     os.chdir("/opt/syschecks/")
 
     with console.status("[bold royal_blue1]Working on it...[/]"):
+        command = "git reset --hard"
+        invoke.run(command, hide=True)
+
         try:
             git_result = invoke.run("git pull", hide=True)
             if git_result.ok:
