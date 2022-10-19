@@ -235,6 +235,71 @@ def userinfo(json_pretty:bool = typer.Option(False, help="Pretty JSON output"),
 
 
 @app.command()
+def automatic_updates(
+        enable_system:bool = typer.Option(False, help="Enable automatic system updates (using cron)"),
+        enable_security:bool = typer.Option(False, help="Enable automatic security updates (using cron)"),
+        disable_auto_updates:bool = typer.Option(False, help="Disable automatic system updates"),
+    ):
+
+    """ Enable or disable automatic `system` or `security only` updates """
+
+    automatic_system_updates_cron_file = "/etc/cron.d/automatic_system_updates"
+    automatic_security_updates_cron_file = "/etc/cron.d/automatic_security_updates"
+
+    if exists(automatic_system_updates_cron_file):
+        os.remove(automatic_system_updates_cron_file)
+    if exists(automatic_security_updates_cron_file):
+        os.remove(automatic_security_updates_cron_file)
+
+    if disable_auto_updates:
+        Console().print("Automatic updates are not disabled!")
+        sys.exit(0)
+
+    cron_jobs_list = []
+    result = invoke.run("which bash", hide=True)
+    if result.ok:
+        bash_shell_location = result.stdout.splitlines()[0]
+
+    cron_shell = "SHELL=" + bash_shell_location
+    cron_jobs_list.append(cron_shell)
+    cron_jobs_list.append("PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin")
+
+    cron_job_generation_date = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    cron_jobs_list.append("\n# THIS JOB FILE WAS GENERATED ON: " + cron_job_generation_date)
+    cron_jobs_list.append("MAILTO=\"\"")
+
+    cron_job_system_updates = "5 4 * * * root /opt/automatic_system_updates.sh"
+    cron_job_security_updates = "5 4 * * * root /opt/automatic_security_updates.sh"
+
+    if enable_system:
+        cron_jobs_list.append(cron_job_system_updates)
+        final_result = "\n".join(cron_jobs_list) + "\n"
+
+        with open(automatic_system_updates_cron_file, "w") as f:
+            f.write(final_result)
+
+        if exists(automatic_system_updates_cron_file):
+            command = "chmod +x /opt/automatic_system_updates.sh"
+            result = invoke.run(command, hide=True)
+            Console().print("[green]The new cron.d file was created at: [/]" + automatic_system_updates_cron_file)
+
+    elif enable_security:
+        cron_jobs_list.append(cron_job_security_updates)
+        final_result = "\n".join(cron_jobs_list) + "\n"
+
+        with open(automatic_security_updates_cron_file, "w") as f:
+            f.write(final_result)
+
+        if exists(automatic_security_updates_cron_file):
+            command = "chmod +x /opt/automatic_security_updates.sh"
+            result = invoke.run(command, hide=True)
+            Console().print("[green]The new cron.d file was created at: [/]" + automatic_security_updates_cron_file)
+
+    else:
+        Console().print("[red]Please choose one of the options [green]--enable-system --enable-security --disable-auto-updates[/] ![/]")
+
+
+@app.command()
 def sysinfo(json_pretty:bool = typer.Option(False, help="Pretty JSON output"),
     ):
     
