@@ -31,7 +31,7 @@ sudo su -
 Execute the below to install SysChecks
  > or with `bash -x syschecks_install.sh` to turn on the debug mode
 ```
-curl https://raw.githubusercontent.com/yaroslav-gwit/SysChecks/main/install.sh > /root/syschecks_install.sh && bash /root/syschecks_install.sh
+curl -S https://raw.githubusercontent.com/yaroslav-gwit/SysChecks/main/install.sh > /root/syschecks_install.sh && bash /root/syschecks_install.sh
 ```
 Remove the installation script after you are done:
 ```
