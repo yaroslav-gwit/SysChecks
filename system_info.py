@@ -18,8 +18,8 @@ class Cpu:
         result = invoke.run(command, hide=True)
         lscpu_lines = result.stdout.splitlines()
 
-        re_cpu_model = re.compile(".*Model name:.*")
-        re_cpu_model_sub = re.compile(".*Model name:.*:\s+")
+        re_cpu_model = re.compile("^Model name:.*")
+        re_cpu_model_sub = re.compile(".*Model name:\s+")
         re_strip_whitespace_1 = re.compile("\s+")
         re_strip_whitespace_2 = re.compile("\s@\s")
 
