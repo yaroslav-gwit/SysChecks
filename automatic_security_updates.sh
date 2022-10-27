@@ -46,7 +46,7 @@ elif [[ $(grep "ID=" /etc/os-release | grep -c "centos") > 0 ]]; then
     grub2-set-default 0
     grub2-mkconfig -o /boot/grub2/grub.cfg
 
-elif [[ $(grep "ID=" /etc/os-release | grep -c 'almalinux\|\"ol\"') > 0 ]]; then
+elif [[ $(grep "^ID=" /etc/os-release | grep -c 'almalinux\|"ol"\|"rocky"') > 0 ]]; then
     dnf install -y python3-dnf-plugin-versionlock
 
     if [[ -f ${LOG_FILE} ]]; then echo "" >> ${LOG_FILE} && echo "" >> ${LOG_FILE}; fi

@@ -22,7 +22,7 @@ elif [[ $(grep "ID=" /etc/os-release | grep -c "centos") > 0 ]]; then
     grub2-set-default 0
     grub2-mkconfig -o /boot/grub2/grub.cfg
 
-elif [[ $(grep "ID=" /etc/os-release | grep -c 'almalinux\|\"ol\"') > 0 ]]; then
+elif [[ $(grep "^ID=" /etc/os-release | grep -c 'almalinux\|"ol"\|"rocky"') > 0 ]]; then
     if [[ -f ${LOG_FILE} ]]; then echo "" >> ${LOG_FILE} && echo "" >> ${LOG_FILE}; fi
     echo "#_ $(date) _#" >> ${LOG_FILE}
     dnf -y update 2>&1 | tee -a ${LOG_FILE}
