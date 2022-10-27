@@ -97,13 +97,15 @@ def dnf_check(dummy_data:bool = False) -> dict:
     re_obslt = re.compile(r"Obsoleting Packages")
     re_sec = re.compile(r".*/Sec.\s")
 
+    re_continue_1 = re.compile("Security:\skernel-core")
+
     for i in all_updates_input:
         i = re_replace_1.sub(" ", i)
         i = i.replace(" baseos ", "")
         i = i.replace(" epel ", "")
         i = i.replace(" appstream ", "")
         i = i.replace(" epel-source", "")
-        if re_mtd.match(i):
+        if re_mtd.match(i) or re_continue_1.match(i):
             continue
         elif re_obslt.match(i):
             break
