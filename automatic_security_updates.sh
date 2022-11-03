@@ -19,6 +19,8 @@ if [[ $(grep "ID=" /etc/os-release | grep -c "ubuntu\|debian") > 0 ]]; then
     if [[ -f ${LOG_FILE} ]]; then echo "" >> ${LOG_FILE} && echo "" >> ${LOG_FILE}; fi
     echo "#_ $(date) _#" >> ${LOG_FILE}
 
+    DEBIAN_FRONTEND=noninteractive
+    APT_LISTCHANGES_FRONTEND=none
     apt-get update 2>&1 | tee -a ${LOG_FILE}
     apt-get --yes upgrade -o Dir::Etc::SourceList=/etc/apt/security.sources.list -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" 2>&1 | tee -a ${LOG_FILE}
 
@@ -43,9 +45,6 @@ elif [[ $(grep "ID=" /etc/os-release | grep -c "centos") > 0 ]]; then
     yum versionlock delete docker* 2>&1 | tee -a ${LOG_FILE}
     yum versionlock delete containerd* 2>&1 | tee -a ${LOG_FILE}
 
-    grub2-set-default 0
-    grub2-mkconfig -o /boot/grub2/grub.cfg
-
 elif [[ $(grep "^ID=" /etc/os-release | grep -c 'almalinux\|"ol"\|"rocky"') > 0 ]]; then
     dnf install -y python3-dnf-plugin-versionlock
 
@@ -62,9 +61,6 @@ elif [[ $(grep "^ID=" /etc/os-release | grep -c 'almalinux\|"ol"\|"rocky"') > 0 
     # DOCKER UPDATES ARE ENABLED AGAIN AT THE END OF THE PROCESS
     dnf versionlock delete docker* 2>&1 | tee -a ${LOG_FILE}
     dnf versionlock delete containerd* 2>&1 | tee -a ${LOG_FILE}
-
-    grub2-set-default 0
-    grub2-mkconfig -o /boot/grub2/grub.cfg
 
 else
     echo "Sorry your OS is not yet supported!" && exit 1
