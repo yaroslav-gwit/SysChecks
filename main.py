@@ -69,7 +69,6 @@ def zabbix_init(
         Console(stderr=True).print("[red]Zabbix agent file doesn't exist here: " + zabbix_agent_file + "[/]")
         sys.exit(1)
 
-    zabbix_agent_file = "/etc/zabbix/zabbix_agentd.conf"
     sudoers_file = "/etc/sudoers"
 
     with open(zabbix_agent_file, "r") as f:
