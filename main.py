@@ -61,28 +61,32 @@ def zabbix_init(
         Console(stderr=True).print("[red]Sorry this feature is not ready yet[/]")
         sys.exit(1)
 
-    zabbix_agent_file = "/etc/zabbix/zabbix_agentd.conf"
-    sudoers_file = "/etc/sudoers"
-
-    if exists(zabbix_agent_file):
-        with open(zabbix_agent_file, "r") as f:
-            zabbix_config = f.read().splitlines()
-        re_match_1 = re.compile("^UserParameter=syschecks\[\*\],sudo\s+syschecks\s+\$1")
-        for n, i in enumerate(zabbix_config):
-            if not re_match_1.match(i) and not (n+1) == len(zabbix_config):
-                continue
-            elif re_match_1.match(i):
-                Console().print("[green]Zabbix config is up-to-date[/]")
-                break
-            else:
-                with open(zabbix_agent_file, "a") as f:
-                    f.write("")
-                    f.write("\n#_ SYSCHECKS INTEGRATION _#")
-                    f.write("\nUserParameter=syschecks[*],sudo syschecks $1")
-                    f.write("")
+    if exists("/etc/zabbix_agentd.conf"):
+        zabbix_agent_file = "/etc/zabbix_agentd.conf"
+    elif exists("/etc/zabbix/zabbix_agentd.conf"):
+        zabbix_agent_file = "/etc/zabbix/zabbix_agentd.conf"
     else:
         Console(stderr=True).print("[red]Zabbix agent file doesn't exist here: " + zabbix_agent_file + "[/]")
         sys.exit(1)
+
+    zabbix_agent_file = "/etc/zabbix/zabbix_agentd.conf"
+    sudoers_file = "/etc/sudoers"
+
+    with open(zabbix_agent_file, "r") as f:
+        zabbix_config = f.read().splitlines()
+    re_match_1 = re.compile("^UserParameter=syschecks\[\*\],sudo\s+syschecks\s+\$1")
+    for n, i in enumerate(zabbix_config):
+        if not re_match_1.match(i) and not (n+1) == len(zabbix_config):
+            continue
+        elif re_match_1.match(i):
+            Console().print("[green]Zabbix config is up-to-date[/]")
+            break
+        else:
+            with open(zabbix_agent_file, "a") as f:
+                f.write("")
+                f.write("\n#_ SYSCHECKS INTEGRATION _#")
+                f.write("\nUserParameter=syschecks[*],sudo syschecks $1")
+                f.write("")
 
     if exists(sudoers_file):
         with open(sudoers_file, "r") as f:
