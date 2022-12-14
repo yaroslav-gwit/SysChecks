@@ -1,11 +1,11 @@
-import os
-import re
-import sys
+# import os
+# import sys
 import json
+import re
 
+from invoke import run
 from natsort import natsorted
 from rich.console import Console
-from invoke import run
 
 
 def get_running_kernel() -> str:
@@ -14,7 +14,9 @@ def get_running_kernel() -> str:
     if result.ok:
         shell_output = result.stdout.splitlines()[-1]
 
+    # trunk-ignore(flake8/W605)
     re_sub_1 = re.compile("\.el7.*")
+    # trunk-ignore(flake8/W605)
     re_sub_2 = re.compile("\.el8.*")
     shell_output = re_sub_1.sub("", shell_output)
     shell_output = re_sub_2.sub("", shell_output)
@@ -30,7 +32,9 @@ def get_installed_kernels() -> list:
 
     kernel_list = []
     re_vmlinuz = re.compile("vmlinuz-")
+    # trunk-ignore(flake8/W605)
     re_sub_1 = re.compile("\.el7.*")
+    # trunk-ignore(flake8/W605)
     re_sub_2 = re.compile("\.el8.*")
     re_ignore_1 = re.compile(".*0-rescue.*")
     for i in shell_output:
@@ -44,13 +48,17 @@ def get_installed_kernels() -> list:
     return kernel_list
 
 
-def final_json(save_file:bool = False, file_location:str = "/tmp/syschk_kern.json", json_pretty:bool = True) -> None:
+def final_json(
+    save_file: bool = False,
+    file_location: str = "/tmp/syschk_kern.json",
+    json_pretty: bool = True,
+) -> None:
     console = Console()
 
     running_kernel = get_running_kernel()
     installed_kernels = get_installed_kernels()
     installed_kernels_oem = []
-    
+
     re_oem = re.compile(".*-oem.*")
     if re_oem.match(running_kernel):
         for i in installed_kernels:
@@ -80,13 +88,13 @@ def final_json(save_file:bool = False, file_location:str = "/tmp/syschk_kern.jso
         print(json_output)
 
 
-def final_human(return_result:bool = False) -> None:
+def final_human(return_result: bool = False) -> None:
     console = Console()
 
     running_kernel = get_running_kernel()
     installed_kernels = get_installed_kernels()
     installed_kernels_oem = []
-    
+
     re_oem = re.compile(".*-oem.*")
     if re_oem.match(running_kernel):
         for i in installed_kernels:
@@ -103,13 +111,21 @@ def final_human(return_result:bool = False) -> None:
     results["list_of_installed_kernels"] = installed_kernels
 
     if running_kernel == latest_installed_kernel:
-        final_string = "🟢 [royal_blue1]You are running the latest available kernel: [/]" + running_kernel
+        final_string = (
+            "🟢 [royal_blue1]You are running the latest available kernel: [/]"
+            + running_kernel
+        )
         if return_result:
             return final_string
         else:
             console.print(" " + final_string)
     else:
-        final_string = "🔴 [bright_red]Please reboot to apply the kernel update![/]\n        [bright_red]Currently active kernel:[/]     " + running_kernel + "\n        [green]Latest installed kernel:[/]     " + latest_installed_kernel
+        final_string = (
+            "🔴 [bright_red]Please reboot to apply the kernel update![/]\n        [bright_red]Currently active kernel:[/]     "
+            + running_kernel
+            + "\n        [green]Latest installed kernel:[/]     "
+            + latest_installed_kernel
+        )
         if return_result:
             return final_string
         else:
