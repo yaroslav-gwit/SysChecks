@@ -6,31 +6,28 @@ if [[ ${EUID} != 0 ]]; then
 fi
 
 # SET THE LOG CONFIG LOCATION
-LOG_FILE=/var/log/automatic_security_updates.log
+LOG_FILE=/var/log/automatic_system_updates.log
 
 # DETECT THE OS TYPE AND START THE UPGRADE
 if [[ $(grep "ID=" /etc/os-release | grep -c "ubuntu\|debian") -gt 0 ]]; then
-	grep -i security /etc/apt/sources.list >/etc/apt/security.sources.list
-
+	if [[ -f ${LOG_FILE} ]]; then echo "" >>${LOG_FILE} && echo "" >>${LOG_FILE}; fi
+	echo "#_ $(date) _#" >>${LOG_FILE}
+	
 	# DOCKER UPDATES ARE LOCKED TO AVOID THE CONTAINER FAILURES
 	apt-mark hold docker*
 	apt-mark hold containerd*
 
-	if [[ -f ${LOG_FILE} ]]; then echo "" >>${LOG_FILE} && echo "" >>${LOG_FILE}; fi
-	echo "#_ $(date) _#" >>${LOG_FILE}
-
+	# UPDATE THE SYSTEM
 	export DEBIAN_FRONTEND=noninteractive
 	export APT_LISTCHANGES_FRONTEND=none
 	apt-get update 2>&1 | tee -a ${LOG_FILE}
-	apt-get --yes upgrade -o Dir::Etc::SourceList=/etc/apt/security.sources.list -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" 2>&1 | tee -a ${LOG_FILE}
+	apt-get dist-upgrade -f -u -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" 2>&1 | tee -a ${LOG_FILE}
 
 	# DOCKER UPDATES ARE ENABLED AGAIN AT THE END OF THE PROCESS
 	apt-mark unhold docker*
 	apt-mark unhold containerd*
 
 elif [[ $(grep "ID=" /etc/os-release | grep -c "centos") -gt 0 ]]; then
-	yum install -y yum-plugin-versionlock
-
 	if [[ -f ${LOG_FILE} ]]; then echo "" >>${LOG_FILE} && echo "" >>${LOG_FILE}; fi
 	echo "#_ $(date) _#" >>${LOG_FILE}
 
@@ -40,8 +37,7 @@ elif [[ $(grep "ID=" /etc/os-release | grep -c "centos") -gt 0 ]]; then
 	yum versionlock containerd* 2>&1 | tee -a ${LOG_FILE}
 
 	# UPDATE THE SYSTEM
-	yum updateinfo info security 2>&1 | tee -a ${LOG_FILE}
-	yum -y update --security 2>&1 | tee -a ${LOG_FILE}
+	yum -y update 2>&1 | tee -a ${LOG_FILE}
 
 	# DOCKER UPDATES ARE ENABLED AGAIN AT THE END OF THE PROCESS
 	yum versionlock delete docker* 2>&1 | tee -a ${LOG_FILE}
@@ -54,18 +50,16 @@ elif [[ $(grep "ID=" /etc/os-release | grep -c "centos") -gt 0 ]]; then
 	# grub2-mkconfig -o /boot/efi/EFI/centos/grub.cfg
 
 elif [[ $(grep "^ID=" /etc/os-release | grep -c 'almalinux\|"ol"\|"rocky"') -gt 0 ]]; then
-	dnf install -y python3-dnf-plugin-versionlock
-
 	if [[ -f ${LOG_FILE} ]]; then echo "" >>${LOG_FILE} && echo "" >>${LOG_FILE}; fi
 	echo "#_ $(date) _#" >>${LOG_FILE}
-
+	
 	# DOCKER UPDATES ARE LOCKED TO AVOID CONTAINER FAILURES
 	dnf versionlock docker* 2>&1 | tee -a ${LOG_FILE}
 	dnf versionlock docker-* 2>&1 | tee -a ${LOG_FILE}
 	dnf versionlock containerd* 2>&1 | tee -a ${LOG_FILE}
 
-	dnf updateinfo info security 2>&1 | tee -a ${LOG_FILE}
-	dnf -y update --security 2>&1 | tee -a ${LOG_FILE}
+	# UPDATE THE SYSTEM
+	dnf -y update 2>&1 | tee -a ${LOG_FILE}
 
 	# DOCKER UPDATES ARE ENABLED AGAIN AT THE END OF THE PROCESS
 	dnf versionlock delete docker* 2>&1 | tee -a ${LOG_FILE}
