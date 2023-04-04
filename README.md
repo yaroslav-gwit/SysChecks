@@ -1,3 +1,6 @@
+This is an old version of the project that will soon be archived. Here is a link to the latest version (based on Go):
+https://gitlab.gateway-it.com/yaroslav/syschecks
+
 # Introduction
 SysChecks up to this date include: Login View, Kernel reboot check, and System Update check.
 <br>![SysChecks Overview](https://github.com/yaroslav-gwit/SysChecks/blob/main/screenshots/syschecks_help_flag.png "SysChecks Overview")
